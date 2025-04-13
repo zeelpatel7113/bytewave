@@ -22,11 +22,11 @@ export default function Navbar() {
   };
 
   return (
-    <div className='fixed w-full px-3 py-3'>
-    <nav className=" bg-black/20 backdrop-blur-lg z-50 border-b border-white/20  rounded-3xl" >
+    <div className='fixed w-full px-3 sm:px-22 py-3 z-[100]'>
+    <nav className=" bg-zinc-900/80 backdrop-blur-lg border-b border-white/20 rounded-3xl" >
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="text-2xl font-bold text-zinc-300 hover:text-zinc-200 transition-colors pl-4">
             BYTEWAVE
           </Link>
 
@@ -39,7 +39,7 @@ export default function Navbar() {
                 className={`${
                   isActive(link.path)
                     ? 'text-blue-600 font-medium'
-                    : 'text-zinc-800 hover:text-blue-600'
+                    : 'text-zinc-100 hover:text-blue-600'
                 } transition-colors text-sm uppercase tracking-wider`}
               >
                 {link.name}

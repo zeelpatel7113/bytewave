@@ -23,7 +23,7 @@ function Hero() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white overflow-hidden pt-12">
+    <div className="min-h-screen bg-white overflow-hidden pt-12 ">
       <style jsx>{`
         .animate-on-scroll {
           opacity: 0;
