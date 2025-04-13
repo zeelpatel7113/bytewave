@@ -1,0 +1,30 @@
+{
+  "name": "bytewave",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "create-admin": "node src/scripts/createAdmin.js"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "framer-motion": "^12.6.3",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "lucide-react": "^0.487.0",
+    "mongoose": "^8.13.2",
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-icons": "^5.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "tailwindcss": "^4"
+  }
+}
