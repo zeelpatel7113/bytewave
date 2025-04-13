@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import ServicesList from '@/components/ServicesList';
 import { homeContent } from '@/content/home';
 import Hero from '@/components/hero';
 
@@ -45,6 +46,8 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+
+      <ServicesList services={homeContent.services} />
 
       <section className="container mx-auto px-6 py-20">
         <motion.div
