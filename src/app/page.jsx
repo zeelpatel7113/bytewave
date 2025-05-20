@@ -5,13 +5,17 @@ import { ArrowRight } from 'lucide-react';
 import ServicesList from '@/components/ServicesList';
 import { homeContent } from '@/content/home';
 import Hero from '@/components/hero';
+import ProcessSection from '@/components/ProcessSection';
+import { Stats } from '@/components/Stats';
+import About from '../components/about';
+import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
   return (
     <div className="bg-white">
       <Hero />
-
-      <section className="py-20 bg-gray-50">
+      <Stats/>
+      {/* <section className="py-20 bg-gray-50">
         <motion.div 
           className="container mx-auto px-4"
           initial={{ opacity: 0 }}
@@ -45,9 +49,12 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
-      </section>
+      </section> */}
 
       <ServicesList services={homeContent.services} />
+      <ProcessSection />
+      <About/>
+      <Testimonials/>
 
       <section className="container mx-auto px-6 py-20">
         <motion.div

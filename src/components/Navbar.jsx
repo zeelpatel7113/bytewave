@@ -9,12 +9,12 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const navLinks = [
-    { name: 'Home', path: '/' },
+    // { name: 'Home', path: '/' },
     { name: 'Services', path: '/services' },
     { name: 'Training', path: '/training' },
     { name: 'Careers', path: '/careers' },
     { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    // { name: 'Contact', path: '/contact' },
   ];
 
   const isActive = (path) => {
@@ -22,12 +22,12 @@ export default function Navbar() {
   };
 
   return (
-    <div className='fixed w-full px-3 sm:px-22 py-3 z-[100]'>
-    <nav className=" bg-zinc-900/80 backdrop-blur-lg border-b border-white/20 rounded-3xl" >
-      <div className="container mx-auto px-4">
+    <div className="fixed w-full z-[100] px-4 sm:px-6 lg:px-8">
+    <nav className="bg-white/80 backdrop-blur-lg border border-gray-200 rounded-3xl my-3 mx-auto max-w-7xl shadow-lg">
+      <div className="container mx-auto px-2 sm:px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-2xl font-bold text-zinc-300 hover:text-zinc-200 transition-colors pl-4">
-            BYTEWAVE
+          <Link href="/" className="text-2xl font-bold text-gray-800 hover:text-gray-600 transition-colors pl-4">
+            <img src='/logo.png' className='h-12'/>
           </Link>
 
           {/* Desktop Navigation */}
@@ -39,21 +39,23 @@ export default function Navbar() {
                 className={`${
                   isActive(link.path)
                     ? 'text-blue-600 font-medium'
-                    : 'text-zinc-100 hover:text-blue-600'
+                    : 'text-gray-600 hover:text-blue-600'
                 } transition-colors text-sm uppercase tracking-wider`}
               >
                 {link.name}
               </Link>
             ))}
+            <Link href="/contact">
             <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-all text-sm uppercase tracking-wider">
-              Subscribe
+            Contact
             </button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 text-zinc-800 hover:text-blue-600 transition-colors"
+            className="lg:hidden p-2 text-gray-600 hover:text-blue-600 transition-colors"
             aria-label="Toggle Menu"
           >
             <div className="w-6 h-5 relative flex flex-col justify-between">
@@ -72,7 +74,7 @@ export default function Navbar() {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden overflow-hidden bg-white/50 backdrop-blur-lg rounded-2xl mt-2 border border-white/20"
+              className="lg:hidden overflow-hidden bg-gray-50/80 backdrop-blur-lg rounded-2xl mt-2 border border-gray-200"
             >
               <div className="py-6 px-4 space-y-6">
                 {navLinks.map((link) => (
@@ -83,15 +85,17 @@ export default function Navbar() {
                     className={`block ${
                       isActive(link.path)
                         ? 'text-blue-600 font-medium'
-                        : 'text-zinc-800 hover:text-blue-600'
+                        : 'text-gray-600 hover:text-blue-600'
                     } transition-colors text-sm uppercase tracking-wider`}
                   >
                     {link.name}
                   </Link>
                 ))}
+            <Link href="/contact">
                 <button className="w-full bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-all text-sm uppercase tracking-wider">
-                  Subscribe
+                Contact
                 </button>
+            </Link>
               </div>
             </motion.div>
           )}

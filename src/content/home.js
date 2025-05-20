@@ -1,3 +1,5 @@
+import { Target, Code2, Sparkles, Rocket } from 'lucide-react';
+
 export const homeContent = {
   hero: {
     title: "The Ultimate Solution for Financial Inclusion",
@@ -16,27 +18,27 @@ export const homeContent = {
   services: [
     {
       number: '01',
-      title: 'Big Project ME',
-      description: 'Managing and delivering large-scale mechanical engineering projects across the Middle East.',
-      image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&q=80&w=200&h=200'
+      title: 'Staffing & Recruitment',
+      description: 'Right talent. Right time. Real results.',
+      image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200&h=200'
+    },
+    {
+      number: '02',
+      title: 'Training & Upskilling',
+      description: 'Fueling growth through knowledge and capability.',
+      image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=200&h=200'
     },
     {
       number: '03',
-      title: 'Construction Machinery ME',
-      description: 'Specialized equipment and machinery solutions for construction projects of all sizes.',
-      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80&w=200&h=200'
+      title: 'IT Solutions & Digital Transformation',
+      description: 'Empowering businesses through intelligent technology.',
+      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=200&h=200'
     },
     {
       number: '04',
-      title: 'ME Consultant',
-      description: 'Expert mechanical engineering consultation services for complex industrial challenges.',
-      image: 'https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=200&h=200'
-    },
-    {
-      number: '05',
-      title: 'MEConstructionNews.com',
-      description: 'Your premier source for construction and engineering news in the Middle East region.',
-      image: 'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&q=80&w=200&h=200'
+      title: 'Marketing & Brand Strategy',
+      description: 'Where creativity meets measurable growth.',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=200&h=200'
     }
   ],
   solutions: {

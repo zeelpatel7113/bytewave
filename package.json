@@ -13,7 +13,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
-    "framer-motion": "^12.6.3",
+    "framer-motion": "^12.9.2",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lucide-react": "^0.487.0",

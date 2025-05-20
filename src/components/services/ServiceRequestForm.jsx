@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export default function ServiceRequestForm() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
-  
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    serviceId: '',
+    name: "",
+    email: "",
+    phone: "",
+    serviceId: "",
   });
 
   useEffect(() => {
@@ -21,14 +21,14 @@ export default function ServiceRequestForm() {
 
   const fetchServices = async () => {
     try {
-      const response = await fetch('/api/services');
+      const response = await fetch("/api/services");
       const data = await response.json();
-      
+
       if (data.success) {
         setServices(data.data);
       }
     } catch (error) {
-      setError('Failed to fetch services');
+      setError("Failed to fetch services");
     }
   };
 
@@ -38,10 +38,10 @@ export default function ServiceRequestForm() {
     setError(null);
 
     try {
-      const response = await fetch('/api/service-requests', {
-        method: 'POST',
+      const response = await fetch("/api/service-requests", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -51,16 +51,16 @@ export default function ServiceRequestForm() {
       if (data.success) {
         setSuccess(true);
         setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          serviceId: '',
+          name: "",
+          email: "",
+          phone: "",
+          serviceId: "",
         });
       } else {
         setError(data.message);
       }
     } catch (error) {
-      setError('Failed to submit request');
+      setError("Failed to submit request");
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,9 @@ export default function ServiceRequestForm() {
           <input
             type="email"
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, email: e.target.value })
+            }
             className="w-full p-3 border border-gray-300 rounded-lg"
             required
           />
@@ -116,7 +118,9 @@ export default function ServiceRequestForm() {
           <input
             type="tel"
             value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, phone: e.target.value })
+            }
             className="w-full p-3 border border-gray-300 rounded-lg"
             required
           />
@@ -128,7 +132,9 @@ export default function ServiceRequestForm() {
           </label>
           <select
             value={formData.serviceId}
-            onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, serviceId: e.target.value })
+            }
             className="w-full p-3 border border-gray-300 rounded-lg"
             required
           >
@@ -146,7 +152,7 @@ export default function ServiceRequestForm() {
           disabled={loading}
           className="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 disabled:opacity-50"
         >
-          {loading ? 'Submitting...' : 'Submit Request'}
+          {loading ? "Submitting..." : "Submit Request"}
         </button>
       </form>
     </div>
