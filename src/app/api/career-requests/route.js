@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/db/connect';
 import Career from '@/db/models/Career';
 
-// Helper function to format date
+// Helper function to format date (keep existing)
 const formatDate = (date) => {
   if (!date) return null;
   try {
@@ -15,19 +15,21 @@ const formatDate = (date) => {
 
 // Helper function to format career request data
 const formatCareerRequestData = (request) => {
-  const requestObj = request.toObject();
+  // Convert mongoose document to plain object if it isn't already
+  const requestObj = request.toObject ? request.toObject() : request;
+  
   return {
     ...requestObj,
     createdAt: formatDate(requestObj.createdAt),
     updatedAt: formatDate(requestObj.updatedAt),
-    statusHistory: requestObj.statusHistory.map(history => ({
+    statusHistory: requestObj.statusHistory?.map(history => ({
       ...history,
       updatedAt: formatDate(history.updatedAt)
-    }))
+    })) || []
   };
 };
 
-// Helper function to generate requestId
+// Helper function to generate requestId (keep existing)
 const generateRequestId = async () => {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
   const count = await Career.countDocuments();
@@ -36,12 +38,13 @@ const generateRequestId = async () => {
 
 // GET all career requests
 export async function GET() {
-  await connectDB();
-
   try {
+    await connectDB();
+
     const requests = await Career.find({})
       .populate('careerId', 'careerType position experienceLevel projectType jobLocation')
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean(); // Use lean() for better performance since we don't need Mongoose methods
 
     const formattedRequests = requests.map(formatCareerRequestData);
 
@@ -58,7 +61,8 @@ export async function GET() {
       { 
         success: false, 
         message: 'Failed to fetch career requests',
-        error: error.message 
+        error: error.message,
+        data: [] // Always return an array even on error
       },
       { status: 500 }
     );
@@ -68,70 +72,46 @@ export async function GET() {
 // POST new career request
 export async function POST(request) {
   await connectDB();
-
+  
   try {
-    const data = await request.json();
-
-    // Validate required fields
-    const requiredFields = ['name', 'email', 'phone', 'careerId', 'experience', 'resumeUrl', 'message'];
-    const missingFields = requiredFields.filter(field => !data[field]);
+    const body = await request.json();
     
-    if (missingFields.length > 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: `Missing required fields: ${missingFields.join(', ')}`
-        },
-        { status: 400 }
-      );
+    // Generate requestId if not provided
+    if (!body.requestId) {
+      body.requestId = await generateRequestId();
     }
 
-    // Validate experience is a number
-    if (isNaN(data.experience) || data.experience < 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: 'Experience must be a positive number'
-        },
-        { status: 400 }
-      );
-    }
-
-    // Generate requestId
-    const requestId = await generateRequestId();
-    const now = new Date();
-
-    const careerRequest = await Career.create({
-      ...data,
-      requestId,
-      statusHistory: [{
+    // Initialize statusHistory if not provided
+    if (!body.statusHistory || body.statusHistory.length === 0) {
+      body.statusHistory = [{
         status: 'pending',
-        note: 'Career application submitted',
-        updatedAt: now,
-        updatedBy: 'Bytewave Admin'
-      }]
-    });
+        note: 'New application submitted',
+        updatedAt: new Date(),
+        updatedBy: 'Patil5913'
+      }];
+    }
 
+    // Create the career request
+    const careerRequest = await Career.create(body);
+
+    // Populate the careerId field
     await careerRequest.populate('careerId', 'careerType position experienceLevel projectType jobLocation');
+
+    // Format the response data
     const formattedRequest = formatCareerRequestData(careerRequest);
 
-    return NextResponse.json(
-      { 
-        success: true, 
-        data: formattedRequest,
-        message: 'Career application submitted successfully' 
-      },
-      { status: 201 }
-    );
+    return NextResponse.json({ 
+      success: true, 
+      message: "Application submitted successfully",
+      data: formattedRequest 
+    }, { status: 200 });
+
   } catch (error) {
     console.error('Create career request error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to submit career application',
-        error: error.message 
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ 
+      success: false, 
+      message: error.message,
+      data: null
+    }, { status: 500 });
   }
 }

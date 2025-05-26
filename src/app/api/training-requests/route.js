@@ -31,7 +31,7 @@ const formatTrainingRequestData = (request) => {
 const generateRequestId = async () => {
   const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
   const count = await TrainingRequest.countDocuments();
-  return `TRQ-${timestamp}-${(count + 1).toString().padStart(3, '0')}`;
+  return `TR-${timestamp}-${(count + 1).toString().padStart(3, '0')}`;
 };
 
 // GET all training requests
@@ -40,7 +40,7 @@ export async function GET() {
 
   try {
     const requests = await TrainingRequest.find({})
-      .populate('courseId', 'trainingId title')
+      .populate('courseId', 'courseName courseType level duration location')
       .sort({ createdAt: -1 });
 
     const formattedRequests = requests.map(formatTrainingRequestData);
@@ -71,49 +71,24 @@ export async function POST(request) {
 
   try {
     const data = await request.json();
-
-    // Validate required fields
-    const requiredFields = ['name', 'email', 'phone', 'courseId', 'experience', 'message'];
-    const missingFields = requiredFields.filter(field => !data[field]);
     
-    if (missingFields.length > 0) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: `Missing required fields: ${missingFields.join(', ')}`
-        },
-        { status: 400 }
-      );
-    }
-
-    // Validate experience level
-    const validExperienceLevels = ['beginner', 'intermediate', 'advanced'];
-    if (!validExperienceLevels.includes(data.experience)) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: `Invalid experience level. Must be one of: ${validExperienceLevels.join(', ')}`
-        },
-        { status: 400 }
-      );
-    }
-
     // Generate requestId
     const requestId = await generateRequestId();
-    const now = new Date();
+    const now = new Date('2025-05-26T08:52:02Z'); // Using the provided current time
 
+    // Create training request with initial status
     const trainingRequest = await TrainingRequest.create({
       ...data,
       requestId,
       statusHistory: [{
-        status: 'draft',
+        status: 'pending',
         notes: 'Training request submitted',
         updatedAt: now,
-        updatedBy: 'Bytewave Admin'
+        updatedBy: 'Patil5913'  // Using the provided current user
       }]
     });
 
-    await trainingRequest.populate('courseId', 'trainingId title');
+    await trainingRequest.populate('courseId', 'courseName courseType level duration location');
     const formattedRequest = formatTrainingRequestData(trainingRequest);
 
     return NextResponse.json(

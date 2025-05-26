@@ -2,13 +2,22 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Settings, FileSpreadsheet, GraduationCap, BookOpen, Briefcase, UserCheck } from "lucide-react";
+import { 
+  Settings, 
+  FileSpreadsheet, 
+  GraduationCap, 
+  BookOpen, 
+  Briefcase, 
+  UserCheck,
+  MessageCircle
+} from "lucide-react";
 import Service from "./services/Service";
 import ServiceRequest from "./service-requests/ServiceRequest";
 import Training from "./training/Training";
 import TrainingRequest from "./training-requests/TrainingRequest";
 import Career from "./careers/Career";
 import CareerRequest from "./career-requests/CareerRequest";
+import Contact from "./contacts/Contact";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("services");
@@ -50,20 +59,26 @@ export default function Dashboard() {
       icon: UserCheck,
       component: <CareerRequest />,
     },
+    {
+      id: "contacts",
+      label: "Contact Forms",
+      icon: MessageCircle,
+      component: <Contact />,
+    },
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="min-w-[1400px]">
       {/* Navigation Buttons */}
-      <div className="flex gap-4 border-b overflow-x-auto">
+      <div className="grid grid-cols-7 border-b">
         {tabs.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
             className={cn(
-              "px-4 py-2 flex items-center gap-2 font-medium transition-colors border-b-2 whitespace-nowrap",
+              "px-4 py-2 flex items-center justify-center gap-2 font-medium transition-colors border-b-2 whitespace-nowrap",
               activeTab === id
-                ? "border-primary text-primary"
+                ? "border-primary text-primary border-b-2"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             )}
           >
@@ -74,7 +89,9 @@ export default function Dashboard() {
       </div>
 
       {/* Content Area */}
-      <div>{tabs.find((tab) => tab.id === activeTab)?.component}</div>
+      <div className="px-6 mt-8">
+        {tabs.find((tab) => tab.id === activeTab)?.component}
+      </div>
     </div>
   );
 }

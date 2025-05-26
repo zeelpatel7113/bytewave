@@ -39,7 +39,7 @@ export default function TrainingForm({ onTrainingCreated }) {
 
   const handleLearningPointChange = (index, value) => {
     const newPoints = [...formData.whatYouWillLearn];
-    newPoints[index] = { point: value.trim() };
+    newPoints[index] = { point: value };
     setFormData({ ...formData, whatYouWillLearn: newPoints });
   };
 

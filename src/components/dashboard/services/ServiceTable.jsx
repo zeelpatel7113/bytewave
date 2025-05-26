@@ -160,12 +160,15 @@ export default function ServiceTable({ onEdit }) {
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Delete Service</DialogTitle>
-            <DialogDescription className="pt-4">
+            <DialogDescription>
               Are you sure you want to delete this service? This action cannot be undone.
-              {deleteDialog.service && (
-                <p className="mt-2 font-medium text-foreground">{deleteDialog.service.title}</p>
-              )}
             </DialogDescription>
+            {/* Moved service title outside DialogDescription */}
+            {deleteDialog.service && (
+              <div className="mt-2 font-medium text-foreground">
+                {deleteDialog.service.title}
+              </div>
+            )}
           </DialogHeader>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button

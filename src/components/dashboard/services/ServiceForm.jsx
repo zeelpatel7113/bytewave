@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toast";
 import { FileUpload } from "@/components/ui/file-upload";
 import { useFileUpload } from "@/lib/fileUpload";
-import {getCurrentDateTime, getCurrentUser} from "@/lib/utils"
+import { getCurrentDateTime, getCurrentUser } from "@/lib/utils";
 const initialFormState = {
   title: "",
   overview: "",
@@ -26,10 +26,9 @@ export default function ServiceForm({ onServiceCreated }) {
 
   const handleKeyBenefitChange = (index, value) => {
     const newKeyBenefits = [...formData.keyBenefits];
-    newKeyBenefits[index] = { point: value.trim() };
+    newKeyBenefits[index] = { point: value }; // Remove the trim() here
     setFormData({ ...formData, keyBenefits: newKeyBenefits });
   };
-
   const addKeyBenefit = () => {
     if (formData.keyBenefits.length < 4) {
       setFormData({

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+// Keep statusHistory schema with validation since it's admin-only
 const statusHistorySchema = new mongoose.Schema({
   status: {
     type: String,
@@ -20,39 +21,21 @@ const statusHistorySchema = new mongoose.Schema({
 }, { _id: false });
 
 const careerSchema = new mongoose.Schema({
-  requestId: {
-    type: String,
-    unique: true,
-    trim: true
-  },
-  name: {
-    type: String,
-    trim: true,
-  },
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-  },
-  phone: {
-    type: String,
-    trim: true,
-  },
-  careerId: { // Reference to admin-managed career posting
+  requestId: String,
+  name: String,
+  email: String,
+  phone: String,
+  careerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'CareerPosting',
   },
   experience: {
-    type: Number,
-  },
-  resumeUrl: {
     type: String,
+    default: ''  // Set default empty string for experience
   },
-  message: {
-    type: String,
-    trim: true,
-  },
-  statusHistory: [statusHistorySchema]
+  resumeUrl: String,
+  message: String,
+  statusHistory: [statusHistorySchema]  // Keep statusHistory validation intact
 }, {
   timestamps: true
 });

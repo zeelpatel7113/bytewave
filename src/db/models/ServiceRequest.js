@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const statusHistorySchema = new mongoose.Schema({
   status: {
     type: String,
-    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected']
+    enum: ['partial','draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected']
   },
   note: {
     type: String,

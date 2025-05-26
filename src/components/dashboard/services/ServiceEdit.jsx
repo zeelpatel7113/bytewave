@@ -34,7 +34,7 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
 
   const handleKeyBenefitChange = (index, value) => {
     const newKeyBenefits = [...formData.keyBenefits];
-    newKeyBenefits[index] = { point: value.trim() };
+    newKeyBenefits[index] = { point: value }; // Remove the trim() here
     setFormData({ ...formData, keyBenefits: newKeyBenefits });
   };
 
@@ -141,11 +141,15 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Title */}
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-base font-medium">Title</Label>
+              <Label htmlFor="title" className="text-base font-medium">
+                Title
+              </Label>
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 required
                 className="h-12"
               />
@@ -153,11 +157,15 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
 
             {/* Overview */}
             <div className="space-y-2">
-              <Label htmlFor="overview" className="text-base font-medium">Overview</Label>
+              <Label htmlFor="overview" className="text-base font-medium">
+                Overview
+              </Label>
               <Textarea
                 id="overview"
                 value={formData.overview}
-                onChange={(e) => setFormData({ ...formData, overview: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, overview: e.target.value })
+                }
                 required
                 className="min-h-[120px] resize-none"
               />
@@ -170,7 +178,9 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
                 <div key={index} className="flex gap-3 items-center">
                   <Input
                     value={benefit.point}
-                    onChange={(e) => handleKeyBenefitChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleKeyBenefitChange(index, e.target.value)
+                    }
                     placeholder="Enter a key benefit"
                     required
                     className="h-12"
@@ -201,11 +211,15 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
 
             {/* Approach */}
             <div className="space-y-2">
-              <Label htmlFor="approach" className="text-base font-medium">Approach</Label>
+              <Label htmlFor="approach" className="text-base font-medium">
+                Approach
+              </Label>
               <Textarea
                 id="approach"
                 value={formData.approach}
-                onChange={(e) => setFormData({ ...formData, approach: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, approach: e.target.value })
+                }
                 required
                 className="min-h-[120px] resize-none"
               />
@@ -217,7 +231,9 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
               <FileUpload
                 value={formData.imageUrl}
                 onChange={handleFileSelect}
-                onRemove={() => setFormData((prev) => ({ ...prev, imageUrl: "" }))}
+                onRemove={() =>
+                  setFormData((prev) => ({ ...prev, imageUrl: "" }))
+                }
                 disabled={loading}
                 uploading={uploading}
                 accept=".jpg,.jpeg,.png,.webp"
@@ -230,17 +246,17 @@ export default function ServiceEdit({ service, isOpen, onClose, onSuccess }) {
 
             {/* Actions */}
             <div className="flex justify-end gap-3 pt-4">
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 onClick={onClose}
                 disabled={loading || uploading}
                 className="px-6"
               >
                 Cancel
               </Button>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={loading || uploading}
                 className="px-6"
               >

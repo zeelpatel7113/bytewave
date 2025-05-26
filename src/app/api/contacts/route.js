@@ -27,6 +27,30 @@ const formatContactData = (contact) => {
   };
 };
 
+// Helper function to generate contactId with retry mechanism
+const generateContactId = async (retryCount = 0) => {
+  try {
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
+    const count = await Contact.countDocuments();
+    const randomSuffix = Math.random().toString(36).substring(2, 5);
+    const requestId = `CON-${timestamp}-${(count + 1).toString().padStart(3, '0')}-${randomSuffix}`;
+
+    // Check if this ID already exists
+    const existing = await Contact.findOne({ requestId });
+    if (existing && retryCount < 3) {
+      // Retry with incremented count
+      return generateContactId(retryCount + 1);
+    }
+
+    return requestId;
+  } catch (error) {
+    console.error('Error generating requestId:', error);
+    // Fallback to timestamp-based ID if all else fails
+    return `CON-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  }
+};
+
+// GET all contacts
 export async function GET() {
   await connectDB();
 
@@ -37,7 +61,7 @@ export async function GET() {
     return NextResponse.json(
       { 
         success: true, 
-        data: formattedContacts
+        data: formattedContacts 
       },
       { status: 200 }
     );
@@ -54,46 +78,62 @@ export async function GET() {
   }
 }
 
+// POST new contact
 export async function POST(request) {
   await connectDB();
 
   try {
     const data = await request.json();
+    const now = new Date();
     
-    // Generate requestId
-    const timestamp = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '');
-    const requestId = `CON-${timestamp}`;
+    // Generate unique requestId
+    const requestId = await generateContactId();
 
-    const contact = await Contact.create({
+    // Prepare the contact data
+    const contactData = {
       requestId,
-      name: data.name,
-      email: data.email,
-      phone: data.phone,
-      message: data.message,
+      name: data.name || '',
+      email: data.email || '',
+      phone: data.phone || '',
+      message: data.message || '',
       statusHistory: [{
         status: 'draft',
-        note: 'Contact request submitted',
-        updatedAt: new Date(),
-        updatedBy: 'Bytewave Admin'
+        note: 'Contact form submitted',
+        updatedAt: now,
+        updatedBy: 'System'
       }]
-    });
+    };
 
+    // Create the contact
+    const contact = await Contact.create(contactData);
     const formattedContact = formatContactData(contact);
 
     return NextResponse.json(
       { 
         success: true, 
         data: formattedContact,
-        message: 'Contact request submitted successfully' 
+        message: 'Contact form submitted successfully'
       },
       { status: 201 }
     );
   } catch (error) {
     console.error('Create contact error:', error);
+    
+    // Handle specific MongoDB errors
+    if (error.code === 11000) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Duplicate request ID, please try again',
+          error: 'Duplicate key error'
+        },
+        { status: 409 }
+      );
+    }
     return NextResponse.json(
       { 
         success: false, 
-        message: 'Failed to submit contact request',
+        message: 'Failed to submit contact form',
         error: error.message 
       },
       { status: 500 }

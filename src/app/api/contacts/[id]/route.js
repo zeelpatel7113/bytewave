@@ -27,12 +27,14 @@ const formatContactData = (contact) => {
   };
 };
 
+// GET single contact
 export async function GET(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
-    const contact = await Contact.findById(id);
+    const contact = await Contact.findOne({ requestId: id });
+
     if (!contact) {
       return NextResponse.json(
         { success: false, message: 'Contact not found' },
@@ -55,23 +57,30 @@ export async function GET(request) {
   }
 }
 
+// PUT update contact
 export async function PUT(request) {
   await connectDB();
 
   try {
-    const data = await request.json();
-    
-    // Validate status
-    const validStatuses = ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected'];
-    if (!validStatuses.includes(data.status)) {
-      return NextResponse.json(
-        { success: false, message: 'Invalid status' },
-        { status: 400 }
-      );
-    }
     const id = request.url.split('/').pop();
+    const data = await request.json();
 
-    const contact = await Contact.findById(id);
+    // Validate status if provided
+    if (data.status) {
+      const validStatuses = ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected'];
+      if (!validStatuses.includes(data.status)) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `Invalid status. Status must be one of: ${validStatuses.join(', ')}`,
+            validStatuses
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    const contact = await Contact.findOne({ requestId: id });
     if (!contact) {
       return NextResponse.json(
         { success: false, message: 'Contact not found' },
@@ -79,13 +88,21 @@ export async function PUT(request) {
       );
     }
 
-    // Add new status to history
-    contact.statusHistory.push({
-      status: data.status,
-      note: data.note || `Status updated to ${data.status}`,
-      updatedAt: new Date(),
-      updatedBy: 'Bytewave Admin'
-    });
+    // Add new status to history if status is provided
+    if (data.status) {
+      contact.statusHistory.push({
+        status: data.status,
+        note: data.note || `Status updated to ${data.status}`,
+        updatedAt: new Date(),
+        updatedBy: data.updatedBy || 'System'
+      });
+    }
+
+    // Update other fields if provided
+    if (data.name) contact.name = data.name;
+    if (data.email) contact.email = data.email;
+    if (data.phone) contact.phone = data.phone;
+    if (data.message) contact.message = data.message;
 
     await contact.save();
     const formattedContact = formatContactData(contact);
@@ -102,17 +119,19 @@ export async function PUT(request) {
     console.error('Update contact error:', error);
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 }
+      { status: 400 }
     );
   }
 }
 
+// DELETE contact
 export async function DELETE(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
-    const contact = await Contact.findByIdAndDelete(id);
+    const contact = await Contact.findOneAndDelete({ requestId: id });
+    
     if (!contact) {
       return NextResponse.json(
         { success: false, message: 'Contact not found' },
@@ -124,14 +143,12 @@ export async function DELETE(request) {
       { 
         success: true,
         message: 'Contact deleted successfully',
-        deletionDetails: {
-          timestamp: formatDate(new Date()),
-          deletedBy: 'Bytewave Admin',
-          contactDetails: {
-            requestId: contact.requestId,
-            name: contact.name,
-            email: contact.email
-          }
+        data: {
+          requestId: contact.requestId,
+          name: contact.name,
+          email: contact.email,
+          deletedAt: formatDate(new Date()),
+          deletedBy: 'System'
         }
       },
       { status: 200 }

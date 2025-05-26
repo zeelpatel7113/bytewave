@@ -59,7 +59,7 @@ export default function CareerEdit({ career, isOpen, onClose, onSuccess }) {
 
   const handleSkillChange = (index, value) => {
     const newSkills = [...formData.coreSkills];
-    newSkills[index] = { skill: value.trim() };
+    newSkills[index] = { skill: value };
     setFormData({ ...formData, coreSkills: newSkills });
   };
 

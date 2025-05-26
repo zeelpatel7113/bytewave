@@ -46,11 +46,23 @@ export default function CareerRequestTable({ setEditRequest }) {
     try {
       const response = await fetch("/api/career-requests");
       const data = await response.json();
+      
       if (data.success && Array.isArray(data.data)) {
-        setRequests(data.data);
+        // Make sure each request has the required fields
+        const validRequests = data.data.filter(request => {
+          return request && request.requestId && 
+                 Array.isArray(request.statusHistory) &&
+                 request.statusHistory.length > 0;
+        });
+        setRequests(validRequests);
       } else {
         setRequests([]);
         console.error("Invalid data format received:", data);
+        toast({
+          title: "Warning",
+          description: "Unable to load career requests properly",
+          variant: "warning",
+        });
       }
     } catch (error) {
       console.error("Error fetching requests:", error);
@@ -130,79 +142,99 @@ export default function CareerRequestTable({ setEditRequest }) {
 
   return (
     <>
-      <div className="rounded-md border overflow-x-auto">
-        <div className="min-w-[1400px]">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[200px] px-6">Name</TableHead>
-                <TableHead className="w-[250px] px-6">Email</TableHead>
-                <TableHead className="w-[150px] px-6">Phone</TableHead>
-                <TableHead className="w-[150px] px-6">Experience</TableHead>
-                <TableHead className="w-[200px] px-6">Position</TableHead>
-                <TableHead className="w-[150px] px-6">Status</TableHead>
-                <TableHead className="w-[150px] px-6">Created At</TableHead>
-                <TableHead className="w-[200px] px-6">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {Array.isArray(requests) && requests.map((request) => {
-                const rowKey = request?.requestId || request?._id || `row-${Math.random()}`;
-                const currentStatus = request?.statusHistory?.[request.statusHistory?.length - 1]?.status || "pending";
-                
-                return (
-                  <TableRow key={rowKey}>
-                    <TableCell className="font-medium px-6">{request?.name || 'N/A'}</TableCell>
-                    <TableCell className="px-6">{request?.email || 'N/A'}</TableCell>
-                    <TableCell className="px-6">{request?.phone || 'N/A'}</TableCell>
-                    <TableCell className="px-6">
-                      {request?.experience ? `${request.experience} years` : 'N/A'}
-                    </TableCell>
-                    <TableCell className="px-6">
-                      {request?.careerId?.position || 'N/A'}
-                    </TableCell>
-                    <TableCell className="px-6">
-                      <Badge className={statusColors[currentStatus]}>
-                        {currentStatus}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="px-6">
-                      {request?.createdAt ? formatDate(request.createdAt) : 'N/A'}
-                    </TableCell>
-                    <TableCell className="px-6">
-                      <div className="flex gap-3">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setSelectedRequest(request)}
-                          className="w-[80px]"
-                        >
-                          <Info className="h-4 w-4 mr-1" />
-                          View
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setEditRequest(request)}
-                          className="w-[80px]"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => handleDeleteClick(request)}
-                          className="w-[80px]"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+      <div className="rounded-md border">
+        <div className="w-full overflow-auto">
+          <div style={{ minWidth: "1500px" }}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[200px] px-6">Name</TableHead>
+                  <TableHead className="w-[250px] px-6">Email</TableHead>
+                  <TableHead className="w-[150px] px-6">Phone</TableHead>
+                  <TableHead className="w-[150px] px-6">Experience</TableHead>
+                  <TableHead className="w-[200px] px-6">Position</TableHead>
+                  <TableHead className="w-[150px] px-6">Status</TableHead>
+                  <TableHead className="w-[150px] px-6">Created At</TableHead>
+                  <TableHead className="w-[250px] px-6">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Array.isArray(requests) &&
+                  requests.map((request) => {
+                    // Ensure we have valid request data
+                    if (!request) return null;
+
+                    const rowKey = request.requestId || request._id || `row-${Math.random()}`;
+                    const currentStatus = request.statusHistory?.[
+                      request.statusHistory.length - 1
+                    ]?.status || "pending";
+
+                    return (
+                      <TableRow key={rowKey}>
+                        <TableCell className="font-medium px-6">
+                          {request.name || "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          {request.email || "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          {request.phone || "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          {request.experience ? request.experience : "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          {request.careerId?.position || "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          <Badge 
+                            className={
+                              statusColors[currentStatus] || "bg-gray-500"
+                            }
+                          >
+                            {currentStatus}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="px-6">
+                          {request.createdAt
+                            ? formatDate(request.createdAt)
+                            : "N/A"}
+                        </TableCell>
+                        <TableCell className="px-6">
+                          <div className="flex gap-3">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setSelectedRequest(request)}
+                              className="w-[80px]"
+                            >
+                              <Info className="h-4 w-4 mr-1" />
+                              View
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => setEditRequest(request)}
+                              className="w-[80px]"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => handleDeleteClick(request)}
+                              className="w-[80px]"
+                            >
+                              Delete
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 
@@ -222,31 +254,31 @@ export default function CareerRequestTable({ setEditRequest }) {
                   <div>
                     <h4 className="text-sm font-medium">Name</h4>
                     <p className="text-sm text-muted-foreground">
-                      {selectedRequest.name}
+                      {selectedRequest.name || "N/A"}
                     </p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Email</h4>
                     <p className="text-sm text-muted-foreground">
-                      {selectedRequest.email}
+                      {selectedRequest.email || "N/A"}
                     </p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Phone</h4>
                     <p className="text-sm text-muted-foreground">
-                      {selectedRequest.phone}
+                      {selectedRequest.phone || "N/A"}
                     </p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Experience</h4>
                     <p className="text-sm text-muted-foreground">
-                      {selectedRequest.experience} years
+                      {selectedRequest.experience || "N/A"}
                     </p>
                   </div>
                   <div>
                     <h4 className="text-sm font-medium">Position</h4>
                     <p className="text-sm text-muted-foreground">
-                      {selectedRequest.careerId?.position || 'N/A'}
+                      {selectedRequest.careerId?.position || "N/A"}
                     </p>
                   </div>
                   <div>
@@ -263,7 +295,9 @@ export default function CareerRequestTable({ setEditRequest }) {
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
-                      <p className="text-sm text-muted-foreground">No resume available</p>
+                      <p className="text-sm text-muted-foreground">
+                        No resume available
+                      </p>
                     )}
                   </div>
                 </div>
@@ -271,36 +305,39 @@ export default function CareerRequestTable({ setEditRequest }) {
                 <div className="space-y-2">
                   <h3 className="font-semibold">Message</h3>
                   <p className="text-sm text-muted-foreground border rounded-md p-4">
-                    {selectedRequest.message || 'No message provided'}
+                    {selectedRequest.message || "No message provided"}
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <h3 className="font-semibold">Status History</h3>
                   <div className="space-y-4">
-                    {[...selectedRequest.statusHistory].reverse().map((status, index) => (
-                      <div
-                        key={`${selectedRequest.requestId}-status-${index}`}
-                        className="border rounded-lg p-4 space-y-2"
-                      >
-                        <div className="flex items-center justify-between">
-                          <Badge className={statusColors[status.status]}>
-                            {status.status}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">
-                            {formatDate(status.updatedAt)}
-                          </span>
-                        </div>
-                        {status.note && (
-                          <p className="text-sm text-muted-foreground mt-2">
-                            {status.note}
+                    {selectedRequest.statusHistory && 
+                     [...selectedRequest.statusHistory]
+                      .reverse()
+                      .map((status, index) => (
+                        <div
+                          key={`${selectedRequest.requestId || selectedRequest._id}-status-${index}`}
+                          className="border rounded-lg p-4 space-y-2"
+                        >
+                          <div className="flex items-center justify-between">
+                            <Badge className={statusColors[status.status] || "bg-gray-500"}>
+                              {status.status}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              {formatDate(status.updatedAt)}
+                            </span>
+                          </div>
+                          {status.note && (
+                            <p className="text-sm text-muted-foreground mt-2">
+                              {status.note}
+                            </p>
+                          )}
+                          <p className="text-xs text-muted-foreground">
+                            Updated by: {status.updatedBy || "N/A"}
                           </p>
-                        )}
-                        <p className="text-xs text-muted-foreground">
-                          Updated by: {status.updatedBy}
-                        </p>
-                      </div>
-                    ))}
+                        </div>
+                      ))}
                   </div>
                 </div>
 
@@ -315,7 +352,7 @@ export default function CareerRequestTable({ setEditRequest }) {
                     <h4 className="text-sm font-medium">Last Updated</h4>
                     <p className="text-sm text-muted-foreground">
                       {formatDate(
-                        selectedRequest.statusHistory[
+                        selectedRequest.statusHistory?.[
                           selectedRequest.statusHistory.length - 1
                         ]?.updatedAt || selectedRequest.createdAt
                       )}
@@ -343,12 +380,12 @@ export default function CareerRequestTable({ setEditRequest }) {
 
           <div className="py-4">
             <p className="text-sm text-muted-foreground">
-              Are you sure you want to delete this career application? This action
-              cannot be undone.
+              Are you sure you want to delete this career application? This
+              action cannot be undone.
             </p>
             {deleteDialog.request && (
               <div className="mt-2 font-medium text-foreground">
-                Application from: {deleteDialog.request.name}
+                Application from: {deleteDialog.request.name || "N/A"}
               </div>
             )}
           </div>
@@ -357,7 +394,11 @@ export default function CareerRequestTable({ setEditRequest }) {
             <Button
               variant="outline"
               onClick={() =>
-                setDeleteDialog({ isOpen: false, request: null, loading: false })
+                setDeleteDialog({
+                  isOpen: false,
+                  request: null,
+                  loading: false,
+                })
               }
               disabled={deleteDialog.loading}
             >
@@ -374,5 +415,5 @@ export default function CareerRequestTable({ setEditRequest }) {
         </DialogContent>
       </Dialog>
     </>
-  );
+);
 }

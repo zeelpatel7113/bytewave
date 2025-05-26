@@ -12,18 +12,19 @@ export default function middleware(req) {
     '/api/training-requests',
     '/api/auth/login',
     '/api/contacts',
-    '/api/careers', 
+    '/api/career-posting', 
+    '/api/career-requests'
   ];
 
   // Check if the current path is a public API route
   if (publicApiRoutes.some(route => pathname.startsWith(route))) {
     // Allow GET requests without authentication
-    if (req.method === 'GET' && (pathname === '/api/services' || pathname === '/api/training-courses')) {
+    if (req.method === 'GET' && (pathname === '/api/services' || pathname === '/api/training-courses' || pathname === '/api/career-posting')) {
       return NextResponse.next();
     }
     
     // Allow POST requests for form submissions
-    if (req.method === 'POST' && (pathname === '/api/contacts'||pathname==='/api/careers'||pathname === '/api/service-requests' || pathname === '/api/training-requests')) {
+    if (req.method === 'POST' && (pathname === '/api/contacts'||pathname==='/api/career-requests'||pathname === '/api/service-requests' || pathname === '/api/training-requests')) {
       return NextResponse.next();
     }
 

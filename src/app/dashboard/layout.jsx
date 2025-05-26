@@ -28,7 +28,7 @@ export default function DashboardLayout({ children }) {
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container h-16 flex items-center justify-between px-6">
-          <h1 className="text-xl font-semibold">Dashboard</h1>
+          <h1 className="text-xl font-semibold">Bytewave Dashboard</h1>
           
           <Button 
             variant="ghost" 

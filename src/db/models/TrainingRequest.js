@@ -3,11 +3,13 @@ import mongoose from 'mongoose';
 const statusHistorySchema = new mongoose.Schema({
   status: {
     type: String,
-    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected', 'completed']
+    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected', 'completed'],
+    default: 'draft'
   },
   notes: {
     type: String,
-    trim: true
+    trim: true,
+    default: ''
   },
   updatedAt: {
     type: Date,
@@ -15,7 +17,8 @@ const statusHistorySchema = new mongoose.Schema({
   },
   updatedBy: {
     type: String,
-    trim: true
+    trim: true,
+    default: 'Bytewave Admin'
   }
 }, { _id: false });
 
@@ -28,49 +31,50 @@ const trainingRequestSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
+    default: ''
   },
   email: {
     type: String,
     trim: true,
     lowercase: true,
+    default: ''
   },
   phone: {
     type: String,
     trim: true,
+    default: ''
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TrainingCourse',
+    default: null
   },
   experience: {
     type: String,
-    enum: ['beginner', 'intermediate', 'advanced'],
+    trim: true,
+    default: 'Not specified'
   },
   message: {
     type: String,
     trim: true,
+    default: ''
   },
-  statusHistory: [statusHistorySchema]
+  statusHistory: {
+    type: [statusHistorySchema],
+    default: () => [{
+      status: 'draft',
+      notes: 'Initial request',
+      updatedAt: new Date(),
+      updatedBy: 'Bytewave Admin'
+    }]
+  }
 }, {
   timestamps: true
 });
 
+// Clear existing models to prevent the OverwriteModelError
+mongoose.models = {};
 
-const TrainingRequest = mongoose.models.TrainingRequest || mongoose.model('TrainingRequest', trainingRequestSchema);
+const TrainingRequest = mongoose.model('TrainingRequest', trainingRequestSchema);
 
 export default TrainingRequest;
-
-// Client-side request creation
-// const newRequest = new TrainingRequest({
-//   name: 'John Doe',
-//   email: 'john@example.com',
-//   phone: '1234567890',
-//   courseId: courseObjectId,
-//   experience: 'beginner',
-//   message: 'Interested in this course'
-// });
-
-// // Admin-side: Populate course details when fetching
-// const request = await TrainingRequest
-//   .findOne({ requestId: 'TR-001' })
-//   .populate('courseId', 'title'); // This will give you the course name
