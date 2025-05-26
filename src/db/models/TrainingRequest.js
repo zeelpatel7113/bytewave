@@ -1,81 +1,80 @@
 import mongoose from 'mongoose';
 
+const statusHistorySchema = new mongoose.Schema({
+  status: {
+    type: String,
+    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected', 'completed'],
+    default: 'draft'
+  },
+  notes: {
+    type: String,
+    trim: true,
+    default: ''
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedBy: {
+    type: String,
+    trim: true,
+    default: 'Bytewave Admin'
+  }
+}, { _id: false });
+
 const trainingRequestSchema = new mongoose.Schema({
+  requestId: {
+    type: String,
+    unique: true,
+    trim: true
+  },
   name: {
     type: String,
-    required: true,
     trim: true,
+    default: ''
   },
   email: {
     type: String,
-    required: true,
     trim: true,
     lowercase: true,
+    default: ''
   },
   phone: {
     type: String,
-    required: true,
     trim: true,
+    default: ''
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: 'TrainingCourse',
-  },
-  courseName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  preferredSchedule: {
-    type: String,
-    required: true,
-    enum: ['weekday-morning', 'weekday-evening', 'weekend-morning', 'weekend-evening'],
+    default: null
   },
   experience: {
     type: String,
-    required: true,
-    enum: ['beginner', 'intermediate', 'advanced'],
+    trim: true,
+    default: 'Not specified'
   },
   message: {
     type: String,
     trim: true,
+    default: ''
   },
-  status: {
-    type: String,
-    required: true,
-    enum: ['pending', 'approved', 'rejected', 'completed'],
-    default: 'pending',
-  },
-  statusHistory: [{
-    status: {
-      type: String,
-      required: true,
-      enum: ['pending', 'approved', 'rejected', 'completed'],
-    },
-    note: {
-      type: String,
-      required: true,
-    },
-    updatedAt: {
-      type: String,
-      required: true,
-    },
-    updatedBy: {
-      type: String,
-      required: true,
-    },
-  }],
-  createdAt: {
-    type: String,
-    required: true,
-  },
-  lastModified: {
-    type: String,
-    required: true,
-  },
+  statusHistory: {
+    type: [statusHistorySchema],
+    default: () => [{
+      status: 'draft',
+      notes: 'Initial request',
+      updatedAt: new Date(),
+      updatedBy: 'Bytewave Admin'
+    }]
+  }
+}, {
+  timestamps: true
 });
 
-const TrainingRequest = mongoose.models.TrainingRequest || mongoose.model('TrainingRequest', trainingRequestSchema);
+// Clear existing models to prevent the OverwriteModelError
+mongoose.models = {};
+
+const TrainingRequest = mongoose.model('TrainingRequest', trainingRequestSchema);
 
 export default TrainingRequest;

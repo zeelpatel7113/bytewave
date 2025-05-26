@@ -1,57 +1,59 @@
-"use client";
+import { motion } from "framer-motion";
 
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
-
-export default function ServiceCard({ service, onEdit, onDelete }) {
+export default function ServiceCard({ service, index, onServiceClick }) {
   return (
-    <div className="relative group bg-white rounded-xl border shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden">
-      <div className="relative h-64 overflow-hidden">
-        {service.imageUrl ? (
-          <img
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className="group relative bg-gradient-to-br from-white to-gray-50 rounded-3xl overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-500 hover:-translate-y-1"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+
+      <div className="relative p-6">
+        <div className="mb-6 h-48 overflow-hidden rounded-2xl">
+          <motion.img
             src={service.imageUrl}
             alt={service.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.4 }}
           />
-        ) : (
-          <div className="w-full h-full bg-gray-200" />
-        )}
-
-        {/* Title that's always visible */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-          <h3 className="text-xl font-semibold text-white">{service.title}</h3>
         </div>
 
-        {/* Hover overlay with content */}
-        <div className="absolute inset-0 bg-black/40 translate-y-full group-hover:translate-y-0 transition-all duration-300">
-          <div className="h-full flex flex-col justify-center items-center p-6">
-            <div className="text-center">
-              <h3 className="text-2xl font-semibold text-white mb-3">
-                {service.title}
-              </h3>
-              <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm inline-block mb-4">
-                {service.category}
-              </span>
-              <p className="text-gray-200 text-sm mb-4 max-w-md mx-auto">
-                {service.description}
-              </p>
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => onEdit(service)}
-                  className="text-white hover:text-blue-400 transition-colors"
-                >
-                  <FiEdit2 className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => onDelete(service._id)}
-                  className="text-white hover:text-red-400 transition-colors"
-                >
-                  <FiTrash2 className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-          </div>
+        <div className="space-y-4">
+          <motion.div
+            className="flex items-center justify-between"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300">
+              {service.title}
+            </h3>
+            <span className="px-3 py-1 text-sm text-blue-600 bg-blue-50 rounded-full">
+              {service.serviceType || "Service"}
+            </span>
+          </motion.div>
+
+          <p className="text-gray-600 text-base line-clamp-3 group-hover:text-gray-700 transition-colors duration-300">
+            {service.overview}
+          </p>
+
+          <motion.button
+            onClick={() => onServiceClick(service)}
+            className="mt-4 w-full inline-flex items-center justify-center space-x-2 px-6 py-3 bg-gray-900 text-white rounded-xl text-sm font-medium transition-all duration-300 hover:bg-blue-600 group"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span>Learn More</span>
+            <motion.span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </motion.span>
+          </motion.button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

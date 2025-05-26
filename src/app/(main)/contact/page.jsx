@@ -1,9 +1,77 @@
 'use client';
-import ContactForm from '@/components/forms/ContactForm';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Clock, MessageSquare } from 'lucide-react';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  
+  const [status, setStatus] = useState({
+    loading: false,
+    error: null,
+    success: false
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ loading: true, error: null, success: false });
+
+    try {
+      const response = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      setStatus({
+        loading: false,
+        error: null,
+        success: true
+      });
+
+      // Clear form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+      });
+
+      // Reset success message after 3 seconds
+      setTimeout(() => {
+        setStatus(prev => ({ ...prev, success: false }));
+      }, 3000);
+
+    } catch (error) {
+      setStatus({
+        loading: false,
+        error: error.message,
+        success: false
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-zinc-900">
       {/* Hero Section */}
@@ -30,14 +98,14 @@ export default function Contact() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-md mx-auto bg-zinc-100 p-8 rounded-lg shadow-md "
+          className="max-w-md mx-auto bg-zinc-100 p-8 rounded-lg shadow-md"
         >
           <h2 className="text-2xl font-bold mb-2 text-center">Send us a Message</h2>
           <p className="text-zinc-600 text-center text-sm mb-6">
             Fill out the form below and we'll get back to you shortly
           </p>
-          
-          <div className="space-y-4">
+
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm mb-2">Name</label>
               <div className="relative">
@@ -49,12 +117,15 @@ export default function Contact() {
                 </span>
                 <input 
                   type="text" 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Enter your name" 
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm mb-2">Email</label>
               <div className="relative">
@@ -66,12 +137,15 @@ export default function Contact() {
                 </span>
                 <input 
                   type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="Enter your email" 
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm mb-2">Phone Number</label>
               <div className="relative">
@@ -82,29 +156,53 @@ export default function Contact() {
                 </span>
                 <input 
                   type="tel" 
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
                   placeholder="Enter your phone number" 
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
-            
+
             <div>
               <label className="block text-sm mb-2">Message</label>
               <textarea 
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Tell us about your project or inquiry" 
                 rows="4" 
                 className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-4 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
               ></textarea>
             </div>
-            
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-blue-50 font-medium py-3 rounded transition-colors flex items-center justify-center gap-2">
-              Send Message
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
+
+            <button 
+              type="submit"
+              disabled={status.loading}
+              className={`w-full ${status.loading ? 'bg-blue-400' : 'bg-blue-500 hover:bg-blue-600'} text-blue-50 font-medium py-3 rounded transition-colors flex items-center justify-center gap-2`}
+            >
+              {status.loading ? 'Sending...' : 'Send Message'}
+              {!status.loading && (
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="22" y1="2" x2="11" y2="13"></line>
+                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+              )}
             </button>
-          </div>
+
+            {status.error && (
+              <div className="text-red-500 text-sm text-center mt-2">
+                {status.error}
+              </div>
+            )}
+
+            {status.success && (
+              <div className="text-green-500 text-sm text-center mt-2">
+                Message sent successfully!
+              </div>
+            )}
+          </form>
         </motion.div>
       </div>
 
@@ -123,7 +221,7 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Chat with us</h3>
-            <a href="mailto:contact@vrugle.com" className="text-blue-500 hover:underline">contact@bytewave.com</a>
+            <a href="mailto:contact@bytewave.com" className="text-blue-500 hover:underline">contact@bytewave.com</a>
             <p className="text-zinc-600 text-sm mt-2">We aim to respond within 24 hours</p>
           </motion.div>
           

@@ -1,6 +1,30 @@
 import mongoose from 'mongoose';
 
+const statusHistorySchema = new mongoose.Schema({
+  status: {
+    type: String,
+    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected']
+  },
+  note: {
+    type: String,
+    trim: true
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedBy: {
+    type: String,
+    trim: true
+  }
+}, { _id: false });
+
 const contactSchema = new mongoose.Schema({
+  requestId: {
+    type: String,
+    unique: true,
+    trim: true
+  },
   name: {
     type: String,
     trim: true,
@@ -14,29 +38,13 @@ const contactSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  subject: {
-    type: String,
-    trim: true,
-  },
   message: {
     type: String,
     trim: true,
   },
-  status: {
-    type: String,
-    enum: ['new', 'read', 'replied', 'resolved', 'archived'],
-    default: 'new',
-  },
-  statusHistory: [{
-    status: String,
-    note: String,
-    updatedAt: String,
-    updatedBy: String,
-  }],
-  createdAt: {
-    type: String,
-    required: true,
-  }
+  statusHistory: [statusHistorySchema]
+}, {
+  timestamps: true
 });
 
 const Contact = mongoose.models.Contact || mongoose.model('Contact', contactSchema);

@@ -1,48 +1,43 @@
 import mongoose from 'mongoose';
 
-const careerSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-  },
-  email: {
-    type: String,
-    trim: true,
-    lowercase: true,
-  },
-  phone: {
-    type: String,
-    trim: true,
-  },
-  position: {
-    type: String,
-    trim: true,
-  },
-  experience: {
-    type: Number,
-  },
-  resumeUrl: {
-    type: String,
-  },
-  message: {
-    type: String,
-    trim: true,
-  },
+// Keep statusHistory schema with validation since it's admin-only
+const statusHistorySchema = new mongoose.Schema({
   status: {
     type: String,
-    enum: ['pending', 'reviewing', 'interviewed', 'selected', 'rejected'],
-    default: 'pending',
+    enum: ['pending', 'reviewing', 'interviewed', 'selected', 'rejected']
   },
-  statusHistory: [{
-    status: String,
-    note: String,
-    updatedAt: String,
-    updatedBy: String,
-  }],
-  createdAt: {
+  note: {
     type: String,
-    required: true,
+    trim: true
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedBy: {
+    type: String,
+    trim: true
+  }
+}, { _id: false });
+
+const careerSchema = new mongoose.Schema({
+  requestId: String,
+  name: String,
+  email: String,
+  phone: String,
+  careerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CareerPosting',
+  },
+  experience: {
+    type: String,
+    default: ''  // Set default empty string for experience
+  },
+  resumeUrl: String,
+  message: String,
+  statusHistory: [statusHistorySchema]  // Keep statusHistory validation intact
+}, {
+  timestamps: true
 });
 
 const Career = mongoose.models.Career || mongoose.model('Career', careerSchema);

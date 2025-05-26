@@ -2,139 +2,154 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/db/connect';
 import Service from '@/db/models/Service';
 
+// Helper function to format date
+const formatDate = () => {
+  return new Date().toISOString().slice(0, 19).replace('T', ' ');
+};
+
 // GET single service
 export async function GET(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
-    
-    const service = await Service.findById(id);
+    const service = await Service.findOne({ 
+      $or: [
+        { serviceId: id },
+        { slug: id }
+      ]
+    });
 
     if (!service) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Service not found' 
-        },
+        { success: false, message: 'Service not found' },
         { status: 404 }
       );
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
-        data: service 
-      },
+      { success: true, data: service },
       { status: 200 }
     );
   } catch (error) {
     console.error('Get service error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to fetch service',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
 }
 
-// PUT/UPDATE service
+// PUT update service
 export async function PUT(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
     const data = await request.json();
-    const currentDateTime = new Date().toDateString(); // Using the provided UTC time
 
-    const service = await Service.findByIdAndUpdate(
-      id,
-      {
-        ...data,
-        lastModified: currentDateTime
-      },
-      { new: true, runValidators: true }
-    );
-
+    // Find service first
+    const service = await Service.findOne({ serviceId: id });
     if (!service) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Service not found' 
-        },
+        { success: false, message: 'Service not found' },
         { status: 404 }
       );
     }
 
+    // Validate keyBenefits if provided
+    if (data.keyBenefits) {
+      if (!Array.isArray(data.keyBenefits) || 
+          data.keyBenefits.length < 1 || 
+          data.keyBenefits.length > 4) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: 'Key benefits must have between 1 and 4 points'
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Update service
+    const updatedService = await Service.findOneAndUpdate(
+      { serviceId: id },
+      { 
+        ...data,
+        updatedAt: formatDate()
+      },
+      { 
+        new: true,
+        runValidators: true
+      }
+    );
+
     return NextResponse.json(
       { 
         success: true, 
-        data: service,
+        data: updatedService,
         message: 'Service updated successfully' 
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Update service error:', error);
+    
+    // Handle duplicate title error
+    if (error.code === 11000 && error.keyPattern?.title) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'A service with this title already exists'
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to update service',
-        error: error.message 
-      },
-      { status: 500 }
+      { success: false, message: error.message },
+      { status: 400 }
     );
   }
 }
 
-// DELETE service
+// DELETE service (soft delete)
 export async function DELETE(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
     
-    const service = await Service.findByIdAndDelete(id);
+    // Soft delete by setting isActive to false
+    const service = await Service.findOneAndUpdate(
+      { serviceId: id },
+      { 
+        isActive: false,
+        updatedAt: formatDate()
+      },
+      { new: true }
+    );
 
     if (!service) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Service not found' 
-        },
+        { success: false, message: 'Service not found' },
         { status: 404 }
       );
     }
 
-    const deletionRecord = {
-      timestamp: new Date().toDateString(), // Using the provided UTC time
-      deletedBy: 'Bytewave Admin',
-      serviceDetails: {
-        id: service._id.toString(),
-        title: service.title,
-        category: service.category
-      }
-    };
-
     return NextResponse.json(
       { 
-        success: true, 
+        success: true,
         message: 'Service deleted successfully',
-        deletionDetails: deletionRecord
+        data: service
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Delete service error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to delete service',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
