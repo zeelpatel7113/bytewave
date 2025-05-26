@@ -2,100 +2,120 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/db/connect';
 import Contact from '@/db/models/Contact';
 
-const CURRENT_USER = "Bytewave Admin";
-const CURRENT_DATETIME = new Date().toDateString();
+// Helper function to format date
+const formatDate = (date) => {
+  if (!date) return null;
+  try {
+    return new Date(date).toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    console.error('Date formatting error:', error);
+    return null;
+  }
+};
 
-export async function PUT(request, { params: rawParams }) {
+// Helper function to format contact data
+const formatContactData = (contact) => {
+  const contactObj = contact.toObject();
+  return {
+    ...contactObj,
+    createdAt: formatDate(contactObj.createdAt),
+    updatedAt: formatDate(contactObj.updatedAt),
+    statusHistory: contactObj.statusHistory.map(history => ({
+      ...history,
+      updatedAt: formatDate(history.updatedAt)
+    }))
+  };
+};
+
+export async function GET(request) {
   await connectDB();
-  const params = await Promise.resolve(rawParams);
 
   try {
-    const id = params.id;
-    if (!id) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact ID is required' 
-        },
-        { status: 400 }
-      );
-    }
-
-    const data = await request.json();
-
-    const contact = await Contact.findByIdAndUpdate(
-      id,
-      {
-        $set: {
-          status: data.status,
-        },
-        $push: {
-          statusHistory: {
-            status: data.status,
-            note: data.note || `Status updated to ${data.status}`,
-            updatedAt: CURRENT_DATETIME,
-            updatedBy: CURRENT_USER
-          }
-        }
-      },
-      { new: true }
-    );
-
+    const id = request.url.split('/').pop();
+    const contact = await Contact.findById(id);
     if (!contact) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact request not found' 
-        },
+        { success: false, message: 'Contact not found' },
         { status: 404 }
       );
     }
 
+    const formattedContact = formatContactData(contact);
+
+    return NextResponse.json(
+      { success: true, data: formattedContact },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Get contact error:', error);
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PUT(request) {
+  await connectDB();
+
+  try {
+    const data = await request.json();
+    
+    // Validate status
+    const validStatuses = ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected'];
+    if (!validStatuses.includes(data.status)) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid status' },
+        { status: 400 }
+      );
+    }
+    const id = request.url.split('/').pop();
+
+    const contact = await Contact.findById(id);
+    if (!contact) {
+      return NextResponse.json(
+        { success: false, message: 'Contact not found' },
+        { status: 404 }
+      );
+    }
+
+    // Add new status to history
+    contact.statusHistory.push({
+      status: data.status,
+      note: data.note || `Status updated to ${data.status}`,
+      updatedAt: new Date(),
+      updatedBy: 'Bytewave Admin'
+    });
+
+    await contact.save();
+    const formattedContact = formatContactData(contact);
+
     return NextResponse.json(
       { 
         success: true, 
-        data: contact,
-        message: 'Contact request updated successfully' 
+        data: formattedContact,
+        message: 'Contact updated successfully' 
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Update contact error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to update contact request',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
 }
 
-export async function DELETE(request, { params: rawParams }) {
+export async function DELETE(request) {
   await connectDB();
-  const params = await Promise.resolve(rawParams);
 
   try {
-    const id = params.id;
-    if (!id) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact ID is required' 
-        },
-        { status: 400 }
-      );
-    }
-
+    const id = request.url.split('/').pop();
     const contact = await Contact.findByIdAndDelete(id);
-
     if (!contact) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact request not found' 
-        },
+        { success: false, message: 'Contact not found' },
         { status: 404 }
       );
     }
@@ -103,14 +123,14 @@ export async function DELETE(request, { params: rawParams }) {
     return NextResponse.json(
       { 
         success: true,
-        message: 'Contact request deleted successfully',
+        message: 'Contact deleted successfully',
         deletionDetails: {
-          timestamp: CURRENT_DATETIME,
-          deletedBy: CURRENT_USER,
+          timestamp: formatDate(new Date()),
+          deletedBy: 'Bytewave Admin',
           contactDetails: {
+            requestId: contact.requestId,
             name: contact.name,
-            email: contact.email,
-            subject: contact.subject
+            email: contact.email
           }
         }
       },
@@ -119,59 +139,7 @@ export async function DELETE(request, { params: rawParams }) {
   } catch (error) {
     console.error('Delete contact error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to delete contact request',
-        error: error.message 
-      },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET(request, { params: rawParams }) {
-  await connectDB();
-  const params = await Promise.resolve(rawParams);
-
-  try {
-    const id = params.id;
-    if (!id) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact ID is required' 
-        },
-        { status: 400 }
-      );
-    }
-
-    const contact = await Contact.findById(id);
-
-    if (!contact) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Contact request not found' 
-        },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(
-      { 
-        success: true, 
-        data: contact 
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error('Get contact error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to fetch contact request',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }

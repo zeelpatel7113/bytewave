@@ -1,81 +1,76 @@
 import mongoose from 'mongoose';
 
+const statusHistorySchema = new mongoose.Schema({
+  status: {
+    type: String,
+    enum: ['draft', 'pending', 'followup1', 'followup2', 'approved', 'rejected', 'completed']
+  },
+  notes: {
+    type: String,
+    trim: true
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedBy: {
+    type: String,
+    trim: true
+  }
+}, { _id: false });
+
 const trainingRequestSchema = new mongoose.Schema({
+  requestId: {
+    type: String,
+    unique: true,
+    trim: true
+  },
   name: {
     type: String,
-    required: true,
     trim: true,
   },
   email: {
     type: String,
-    required: true,
     trim: true,
     lowercase: true,
   },
   phone: {
     type: String,
-    required: true,
     trim: true,
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: 'TrainingCourse',
-  },
-  courseName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  preferredSchedule: {
-    type: String,
-    required: true,
-    enum: ['weekday-morning', 'weekday-evening', 'weekend-morning', 'weekend-evening'],
   },
   experience: {
     type: String,
-    required: true,
     enum: ['beginner', 'intermediate', 'advanced'],
   },
   message: {
     type: String,
     trim: true,
   },
-  status: {
-    type: String,
-    required: true,
-    enum: ['pending', 'approved', 'rejected', 'completed'],
-    default: 'pending',
-  },
-  statusHistory: [{
-    status: {
-      type: String,
-      required: true,
-      enum: ['pending', 'approved', 'rejected', 'completed'],
-    },
-    note: {
-      type: String,
-      required: true,
-    },
-    updatedAt: {
-      type: String,
-      required: true,
-    },
-    updatedBy: {
-      type: String,
-      required: true,
-    },
-  }],
-  createdAt: {
-    type: String,
-    required: true,
-  },
-  lastModified: {
-    type: String,
-    required: true,
-  },
+  statusHistory: [statusHistorySchema]
+}, {
+  timestamps: true
 });
+
 
 const TrainingRequest = mongoose.models.TrainingRequest || mongoose.model('TrainingRequest', trainingRequestSchema);
 
 export default TrainingRequest;
+
+// Client-side request creation
+// const newRequest = new TrainingRequest({
+//   name: 'John Doe',
+//   email: 'john@example.com',
+//   phone: '1234567890',
+//   courseId: courseObjectId,
+//   experience: 'beginner',
+//   message: 'Interested in this course'
+// });
+
+// // Admin-side: Populate course details when fetching
+// const request = await TrainingRequest
+//   .findOne({ requestId: 'TR-001' })
+//   .populate('courseId', 'title'); // This will give you the course name

@@ -1,6 +1,27 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/db/connect';
-import TrainingCourse from '@/db/models/TrainingCourse';
+import TrainingCourse from '@/db/models/Training';
+
+// Helper function to format date
+const formatDate = (date) => {
+  if (!date) return null;
+  try {
+    return new Date(date).toISOString().slice(0, 19).replace('T', ' ');
+  } catch (error) {
+    console.error('Date formatting error:', error);
+    return null;
+  }
+};
+
+// Helper function to format training course data
+const formatTrainingData = (course) => {
+  const courseObj = course.toObject();
+  return {
+    ...courseObj,
+    createdAt: formatDate(courseObj.createdAt),
+    updatedAt: formatDate(courseObj.updatedAt)
+  };
+};
 
 // GET single training course
 export async function GET(request) {
@@ -8,133 +29,142 @@ export async function GET(request) {
 
   try {
     const id = request.url.split('/').pop();
-    
-    const course = await TrainingCourse.findById(id);
+    const course = await TrainingCourse.findOne({ trainingId: id });
 
     if (!course) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Training course not found' 
-        },
+        { success: false, message: 'Training course not found' },
         { status: 404 }
       );
     }
 
+    const formattedCourse = formatTrainingData(course);
+
     return NextResponse.json(
-      { 
-        success: true, 
-        data: course 
-      },
+      { success: true, data: formattedCourse },
       { status: 200 }
     );
   } catch (error) {
     console.error('Get training course error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to fetch training course',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
 }
 
-// PUT/UPDATE training course
+// PUT update training course
 export async function PUT(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
     const data = await request.json();
-    const currentDateTime = new Date().toDateString(); // Using the provided UTC time
 
-    const course = await TrainingCourse.findByIdAndUpdate(
-      id,
-      {
+    // Validate whatYouWillLearn if provided
+    if (data.whatYouWillLearn && data.whatYouWillLearn.length > 4) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Learning points cannot exceed 4 items'
+        },
+        { status: 400 }
+      );
+    }
+
+    const course = await TrainingCourse.findOneAndUpdate(
+      { trainingId: id },
+      { 
         ...data,
-        lastModified: currentDateTime
+        updatedAt: new Date()
       },
-      { new: true, runValidators: true }
+      { 
+        new: true,
+        runValidators: true
+      }
     );
 
     if (!course) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Training course not found' 
-        },
+        { success: false, message: 'Training course not found' },
         { status: 404 }
       );
     }
 
+    const formattedCourse = formatTrainingData(course);
+
     return NextResponse.json(
       { 
         success: true, 
-        data: course,
+        data: formattedCourse,
         message: 'Training course updated successfully' 
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Update training course error:', error);
+    
+    // Handle duplicate title error
+    if (error.code === 11000 && error.keyPattern?.title) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'A course with this title already exists'
+        },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to update training course',
-        error: error.message 
-      },
-      { status: 500 }
+      { success: false, message: error.message },
+      { status: 400 }
     );
   }
 }
 
-// DELETE training course
+// DELETE training course (soft delete)
 export async function DELETE(request) {
   await connectDB();
 
   try {
     const id = request.url.split('/').pop();
     
-    const course = await TrainingCourse.findByIdAndDelete(id);
+    // Soft delete by setting isActive to false
+    const course = await TrainingCourse.findOneAndUpdate(
+      { trainingId: id },
+      { 
+        isActive: false,
+        updatedAt: new Date()
+      },
+      { new: true }
+    );
 
     if (!course) {
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Training course not found' 
-        },
+        { success: false, message: 'Training course not found' },
         { status: 404 }
       );
     }
 
-    const deletionRecord = {
-      timestamp: new Date().toDateString(),
-      deletedBy: 'Bytewave Admin',
-      courseDetails: {
-        id: course._id.toString(),
-        title: course.title,
-        category: course.category
-      }
-    };
+    const formattedCourse = formatTrainingData(course);
 
     return NextResponse.json(
       { 
-        success: true, 
+        success: true,
         message: 'Training course deleted successfully',
-        deletionDetails: deletionRecord
+        data: {
+          trainingId: formattedCourse.trainingId,
+          title: formattedCourse.title,
+          deletedAt: formatDate(new Date()),
+          deletedBy: 'Bytewave Admin'
+        }
       },
       { status: 200 }
     );
   } catch (error) {
     console.error('Delete training course error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to delete training course',
-        error: error.message 
-      },
+      { success: false, message: error.message },
       { status: 500 }
     );
   }
