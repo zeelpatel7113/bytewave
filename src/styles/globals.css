@@ -1,0 +1,33 @@
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 30s linear infinite;
+}
+
+.marquee-container-reverse {
+  display: flex;
+  width: 200%;
+}
+
+.process-card {
+  will-change: transform, opacity;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.process-card {
+  will-change: transform, opacity;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* .logo-image {
+  will-change: filter, transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+} */
