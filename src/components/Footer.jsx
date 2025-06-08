@@ -48,13 +48,13 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
-                  +91 9909914815
+                   +1 (314) 464-5006
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-blue-500 flex-shrink-0" />
                 <span className="text-zinc-700 font-medium">
-                  contact@bytewave.com
+                  contact@bytewavetechnology.com
                 </span>
               </li>
               <li className="flex gap-4 mt-4">
