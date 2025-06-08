@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 
 export default function ServiceIntro() {
   const descriptionText =
-    "We provide and encourage through-the-line marketing services – an integrated approach for our commercial partners to use both, above the line and below the line, traditional marketing methods to reach their targets. We help to create awareness and engagement utilising a marketing mix that leads to conversion.";
+    "We drive results through integrated marketing and technology solutions—blending digital innovation with strategic recruitment, IT, and cloud services. Our end-to-end approach creates awareness, engages audiences, and converts opportunities into growth. From staffing to SaaS, We tailor solutions that deliver measurable impact.";
   const words = descriptionText.split(" ");
   const { scrollYProgress } = useScroll();
-  const [wordOpacities, setWordOpacities] = useState(Array(words.length).fill(0.2));
+  const [wordOpacities, setWordOpacities] = useState(
+    Array(words.length).fill(0.2)
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,7 +24,7 @@ export default function ServiceIntro() {
           setTimeout(() => {
             word.style.opacity = "1";
             word.style.transform = "translateY(0)";
-          }, index * 50);
+          }, index * 25); // Reduced from 50 to 25 for faster animation
         });
       }
     };
@@ -36,8 +38,8 @@ export default function ServiceIntro() {
     const updateOpacities = () => {
       const progress = scrollYProgress.get();
       const newOpacities = words.map((_, index) => {
-        const wordProgress = progress + index * 0.015;
-        return Math.max(0.2, Math.min(1, wordProgress * 3));
+        const wordProgress = progress + index * 0.008; // Reduced from 0.015 to 0.008 for faster animation
+        return Math.max(0.2, Math.min(1, wordProgress * 4)); // Increased multiplier from 3 to 4
       });
       setWordOpacities(newOpacities);
     };
@@ -73,20 +75,21 @@ export default function ServiceIntro() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              Create awareness, provoke engagement, generate interest, lead to
-              conversion.
+              Empower Talent. Elevate Brands. Engineer Growth.
             </motion.h2>
 
             <div className="text-xl leading-relaxed animated-text text-zinc-900">
               {words.map((word, index) => (
                 <motion.span
                   key={`word-${index}`}
-                  className="word inline-block mr-[0.3em] opacity-0"
+                  className={`word inline-block mr-[0.3em] opacity-0 ${
+                    word.toLowerCase() === "we" ? "text-blue-500" : ""
+                  }`}
                   style={{
                     transform: "translateY(20px)",
-                    transition: `opacity 0.5s ease, transform 0.5s ease`,
-                    transitionDelay: `${index * 0.01}s`,
-                    opacity: wordOpacities[index]
+                    transition: `opacity 0.3s ease, transform 0.3s ease`, // Reduced from 0.5s to 0.3s
+                    transitionDelay: `${index * 0.005}s`, // Reduced from 0.01 to 0.005
+                    opacity: wordOpacities[index],
                   }}
                 >
                   {word}

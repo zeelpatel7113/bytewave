@@ -39,9 +39,7 @@ const CareersPage = () => {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Connecting business audiences with business buyers and sellers through
-            content solutions, lead generation, newsletters, print and online
-            advertising, social media and content driven sponsorship.
+            Advance your career where business, tech, and growth converge-transforming skills into solutions that connect the digital economy.
           </motion.p>
         </div>
       </motion.div>

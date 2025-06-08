@@ -87,30 +87,32 @@ function ServicesPage() {
   // Submit form data at trigger points
   const submitFormData = async () => {
     // Only submit if there are changes AND actual form data
-    if (formChangesRef.current.hasChanges && 
-        formChangesRef.current.data && 
-        hasFormData(formChangesRef.current.data)) {
+    if (
+      formChangesRef.current.hasChanges &&
+      formChangesRef.current.data &&
+      hasFormData(formChangesRef.current.data)
+    ) {
       try {
         await submitServiceRequest({
           ...formChangesRef.current.data,
           statusHistory: [
             ...formChangesRef.current.data.statusHistory,
             {
-              status: 'draft',
-              note: 'Form data submitted',
-              updatedAt: '2025-05-26 03:53:56',
-              updatedBy: 'Patil5913'
-            }
-          ]
+              status: "draft",
+              note: "Form data submitted",
+              updatedAt: "2025-05-26 03:53:56",
+              updatedBy: "Patil5913",
+            },
+          ],
         });
         // Reset changes after successful submission
         formChangesRef.current = {
           data: null,
           hasChanges: false,
-          lastUpdated: null
+          lastUpdated: null,
         };
       } catch (error) {
-        console.warn('Error submitting form data:', error);
+        console.warn("Error submitting form data:", error);
       }
     }
   };
@@ -123,12 +125,12 @@ function ServicesPage() {
       statusHistory: [
         ...formData.statusHistory,
         {
-          status: 'draft',
-          note: 'Service selected',
-          updatedAt: '2025-05-26 03:53:56',
-          updatedBy: 'Patil5913'
-        }
-      ]
+          status: "draft",
+          note: "Service selected",
+          updatedAt: "2025-05-26 03:53:56",
+          updatedBy: "Patil5913",
+        },
+      ],
     };
     setFormData(newFormData);
     // Only store if there's actual data
@@ -136,7 +138,7 @@ function ServicesPage() {
       formChangesRef.current = {
         data: newFormData,
         hasChanges: true,
-        lastUpdated: Date.now()
+        lastUpdated: Date.now(),
       };
     }
     document.body.style.overflow = "hidden";
@@ -147,7 +149,7 @@ function ServicesPage() {
     if (hasFormData(formChangesRef.current.data)) {
       await submitFormData();
     }
-    
+
     setSelectedService(null);
     setShowContactForm(false);
     setFormTouched(false);
@@ -163,28 +165,28 @@ function ServicesPage() {
       statusHistory: [
         ...formData.statusHistory,
         {
-          status: 'draft',
+          status: "draft",
           note: `Updated ${name} field`,
-          updatedAt: '2025-05-26 03:53:56',
-          updatedBy: 'Patil5913'
-        }
-      ]
+          updatedAt: "2025-05-26 03:53:56",
+          updatedBy: "Patil5913",
+        },
+      ],
     };
     setFormData(newFormData);
-    
+
     // Only store if there's actual data
     if (hasFormData(newFormData)) {
       formChangesRef.current = {
         data: newFormData,
         hasChanges: true,
-        lastUpdated: Date.now()
+        lastUpdated: Date.now(),
       };
       setFormTouched(true);
     } else {
       formChangesRef.current = {
         data: null,
         hasChanges: false,
-        lastUpdated: null
+        lastUpdated: null,
       };
       setFormTouched(false);
     }
@@ -208,12 +210,12 @@ function ServicesPage() {
         statusHistory: [
           ...formData.statusHistory,
           {
-            status: 'draft',
-            note: 'Form submitted',
-            updatedAt: '2025-05-26 03:53:56',
-            updatedBy: 'Patil5913'
-          }
-        ]
+            status: "draft",
+            note: "Form submitted",
+            updatedAt: "2025-05-26 03:53:56",
+            updatedBy: "Patil5913",
+          },
+        ],
       });
 
       setFormStatus({
@@ -224,18 +226,19 @@ function ServicesPage() {
       formChangesRef.current = {
         data: null,
         hasChanges: false,
-        lastUpdated: null
+        lastUpdated: null,
       };
       resetForm();
       setFormTouched(false);
     } catch (error) {
       setFormStatus({
         submitted: false,
-        error: error.message || "There was an error submitting your request. Please try again.",
+        error:
+          error.message ||
+          "There was an error submitting your request. Please try again.",
       });
     }
   };
-
 
   const resetForm = () => {
     const newFormData = {
@@ -284,19 +287,55 @@ function ServicesPage() {
     setShowContactForm(true);
   };
 
-
-
-
-
   // Minimal loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white">
         <div className="bg-gray-900 text-white py-40 px-4 sm:px-6 lg:px-8 rounded-b-[40px]">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold mb-16 mt-12 opacity-50">
-              Services
-            </h1>
+            {/* Animated title skeleton */}
+            <motion.div
+              className="h-24 w-48 bg-gray-700 rounded-lg mb-16 mt-12"
+              animate={{ opacity: [0.5, 0.7, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            {/* Animated description skeleton */}
+            <div className="space-y-4">
+              <motion.div
+                className="h-6 w-3/4 bg-gray-700 rounded"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+              />
+              <motion.div
+                className="h-6 w-2/3 bg-gray-700 rounded"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Service grid skeleton */}
+        <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, index) => (
+              <motion.div
+                key={index}
+                className="bg-gray-100 rounded-2xl p-6 h-72"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: index * 0.1,
+                }}
+              >
+                <div className="space-y-4">
+                  <div className="h-10 w-20 bg-gray-200 rounded" />
+                  <div className="h-6 w-3/4 bg-gray-200 rounded" />
+                  <div className="h-24 w-full bg-gray-200 rounded" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -327,9 +366,10 @@ function ServicesPage() {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Connecting business audiences with business buyers and sellers
-            through content solutions, lead generation, newsletters, print and
-            online advertising, social media and content driven sponsorship.
+            At Bytewave, we offer a comprehensive suite of services designed to
+            empower your business with cutting-edge solutions. From staffing and
+            recruitment to digital marketing, IT services solutions
+            we provide end-to-end support to help you achieve your goals.
           </motion.p>
         </div>
       </motion.div>

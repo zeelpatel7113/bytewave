@@ -4,8 +4,8 @@ import { ToastProvider } from '@/components/ui/toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'ByteWave - Technology Solutions',
-  description: 'Professional technology services and training solutions',
+  title: 'Technology',
+  description: 'Building digital excellence through innovation and creativity',
 };
 
 export default function RootLayout({ children }) {

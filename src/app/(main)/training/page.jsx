@@ -192,7 +192,7 @@ function TrainingPage() {
       hasChanges: true,
       lastUpdated: Date.now(),
     };
-    
+
     // Close the modal and scroll to form
     setSelectedTraining(null);
     document.body.style.overflow = "auto";
@@ -306,9 +306,49 @@ function TrainingPage() {
       <div className="min-h-screen bg-white">
         <div className="bg-gray-900 text-white py-40 px-4 sm:px-6 lg:px-8 rounded-b-[40px]">
           <div className="max-w-7xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold mb-16 mt-12 opacity-50">
-              Training
-            </h1>
+            {/* Animated title skeleton */}
+            <motion.div
+              className="h-24 w-48 bg-gray-700 rounded-lg mb-16 mt-12"
+              animate={{ opacity: [0.5, 0.7, 0.5] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            {/* Animated description skeleton */}
+            <div className="space-y-4">
+              <motion.div
+                className="h-6 w-3/4 bg-gray-700 rounded"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
+              />
+              <motion.div
+                className="h-6 w-2/3 bg-gray-700 rounded"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Training grid skeleton */}
+        <div className="max-w-7xl mx-auto py-20 px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[...Array(6)].map((_, index) => (
+              <motion.div
+                key={index}
+                className="bg-gray-100 rounded-2xl p-6 h-72"
+                animate={{ opacity: [0.5, 0.7, 0.5] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  delay: index * 0.1,
+                }}
+              >
+                <div className="space-y-4">
+                  <div className="h-10 w-20 bg-gray-200 rounded" />
+                  <div className="h-6 w-3/4 bg-gray-200 rounded" />
+                  <div className="h-24 w-full bg-gray-200 rounded" />
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
@@ -375,18 +415,15 @@ function TrainingPage() {
       </AnimatePresence>
 
       {/* Training Form Section - Always visible */}
-      <div
-        ref={formRef}
-        className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50"
-      >
+      <div ref={formRef} className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
         <div className="max-w-3xl mx-auto">
           <div className="mb-8 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Training Inquiry Form
             </h2>
             <p className="text-gray-600">
-              Fill out the form below and we'll get back to you with more information
-              about our training programs.
+              Fill out the form below and we'll get back to you with more
+              information about our training programs.
             </p>
           </div>
 

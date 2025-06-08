@@ -45,7 +45,7 @@ function App() {
     }
   ];
 
-  const descriptionText = "We provide and encourage through-the-line marketing services – an integrated approach for our commercial partners to use both, above the line and below the line, traditional marketing methods to reach their targets. We help to create awareness and engagement utilising a marketing mix that leads to conversion.";
+  const descriptionText = "We deliver through-the-line talent solutions-a unified approach that combines strategic recruitment with targeted IT staffing to maximize workforce potential. By leveraging our dual expertise in human capital and technology, we build employer brand awareness, foster meaningful candidate engagement, and drive measurable hiring outcomes for our partners.";
   const words = descriptionText.split(' ');
   const { scrollYProgress } = useScroll();
   const [wordOpacities, setWordOpacities] = useState(Array(words.length).fill(0.2));
@@ -130,7 +130,7 @@ function App() {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Connecting business audiences with business buyers and sellers through content solutions, lead generation, newsletters, print and online advertising, social media and content driven sponsorship.
+            Powering Businesses with Elite Talent, Future-Ready IT Solutions, and Growth-Optimized Strategies.
           </motion.p>
         </div>
       </motion.div>
@@ -159,7 +159,7 @@ function App() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
-                Create awareness, provoke engagement, generate interest, lead to conversion.
+                Empower Talent. Elevate Brands. Engineer Growth.
               </motion.h2>
               
               <div className="text-xl leading-relaxed animated-text text-zinc-900">

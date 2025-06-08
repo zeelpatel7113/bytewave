@@ -10,22 +10,22 @@ function WhoWeAre() {
     {
       icon: <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Our Story",
-      content: "Team of digital craftsmen combining creativity with technical expertise."
+      content: "Architects connecting talent with technology."
     },
     {
       icon: <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Mission & Vision",
-      content: "Pushing boundaries of digital innovation while delivering exceptional value."
+      content: "Fueling business success through people+tech."
     },
     {
       icon: <Code className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Our Expertise",
-      content: "Specialists in modern web technologies and seamless digital experiences."
+      content: "Where skilled talent meets IT innovation."
     },
     {
       icon: <Heart className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Customer-Centric",
-      content: "Building lasting partnerships through transparent communication."
+      content: "Trusted partners in your growth journey."
     }
   ];
   
