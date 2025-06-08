@@ -72,9 +72,7 @@ const trainingRequestSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Clear existing models to prevent the OverwriteModelError
-mongoose.models = {};
 
-const TrainingRequest = mongoose.model('TrainingRequest', trainingRequestSchema);
+const TrainingRequest = mongoose.models.TrainingRequest || mongoose.model('TrainingRequest', trainingRequestSchema);
 
 export default TrainingRequest;

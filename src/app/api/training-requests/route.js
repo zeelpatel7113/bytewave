@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/db/connect';
 import TrainingRequest from '@/db/models/TrainingRequest';
+// import TrainingCourse from '@/db/models/Training';
 
 // Helper function to format date
 const formatDate = (date) => {
