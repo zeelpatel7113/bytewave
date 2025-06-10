@@ -117,7 +117,12 @@ export async function POST(request) {
     let serviceIdToUse = undefined;
     if (data.serviceId) {
       try {
-        serviceIdToUse = new mongoose.Types.ObjectId(data.serviceId);
+        serviceIdToUse =
+          typeof data.serviceId === "string"
+            ? new mongoose.Types.ObjectId(data.serviceId)
+            : data.serviceId._id
+            ? new mongoose.Types.ObjectId(data.serviceId._id)
+            : undefined;
       } catch (error) {
         console.warn("Invalid serviceId format, continuing without serviceId");
       }

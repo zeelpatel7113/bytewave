@@ -41,6 +41,7 @@ const serviceRequestSchema = new mongoose.Schema({
   serviceId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Service',
+    required: false
   },
   message: {
     type: String,

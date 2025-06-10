@@ -18,6 +18,11 @@ function ServicesPage() {
   const [error, setError] = useState(null);
   const [formTouched, setFormTouched] = useState(false);
 
+  // Add a submission tracker
+  const [submissionInProgress, setSubmissionInProgress] = useState(false);
+  const submissionTimeoutRef = useRef(null);
+  const submissionIdRef = useRef(null);
+
   // Form data in state for UI rendering
   const [formData, setFormData] = useState({
     name: "",
@@ -29,7 +34,7 @@ function ServicesPage() {
       {
         status: "draft",
         note: "Initial form data",
-        updatedAt: "2025-05-26 03:49:21",
+        updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
         updatedBy: "Patil5913",
       },
     ],
@@ -37,6 +42,7 @@ function ServicesPage() {
 
   const [formStatus, setFormStatus] = useState({
     submitted: false,
+    isSubmitting: false,
     error: null,
   });
 
@@ -46,6 +52,37 @@ function ServicesPage() {
     hasChanges: false,
     lastUpdated: null,
   });
+
+  // Generate a unique submission ID
+  const generateSubmissionId = () => {
+    return `submit-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  };
+
+  // Check if submission is currently in progress or recently completed
+  const isSubmissionAllowed = () => {
+    if (submissionInProgress) {
+      console.log("Submission already in progress, preventing duplicate");
+      return false;
+    }
+    return true;
+  };
+
+  // Start submission timer
+  const startSubmissionTimer = (id) => {
+    submissionIdRef.current = id;
+    setSubmissionInProgress(true);
+    
+    // Clear any existing timeout
+    if (submissionTimeoutRef.current) {
+      clearTimeout(submissionTimeoutRef.current);
+    }
+    
+    // Set new timeout to reset submission state after 10 seconds
+    submissionTimeoutRef.current = setTimeout(() => {
+      setSubmissionInProgress(false);
+      submissionIdRef.current = null;
+    }, 10000); // 10 seconds lockout
+  };
 
   // Fetch services on component mount
   useEffect(() => {
@@ -62,49 +99,96 @@ function ServicesPage() {
     };
 
     loadServices();
+    
+    // Cleanup submission timeout on unmount
+    return () => {
+      if (submissionTimeoutRef.current) {
+        clearTimeout(submissionTimeoutRef.current);
+      }
+    };
   }, []);
+  
+  // Handle route change events
   useEffect(() => {
     const handleRouteChange = () => {
-      submitFormData();
+      // Only try to submit if allowed (not currently submitting)
+      if (isSubmissionAllowed()) {
+        submitFormData();
+      }
     };
 
     window.addEventListener("beforeunload", handleRouteChange);
-    router.events?.on("routeChangeStart", handleRouteChange);
-
+    
+    // Next.js App Router doesn't have router.events
+    // If you're using Pages Router, uncomment these lines
+    // router.events?.on("routeChangeStart", handleRouteChange);
+    
     return () => {
       window.removeEventListener("beforeunload", handleRouteChange);
-      router.events?.off("routeChangeStart", handleRouteChange);
-      submitFormData();
+      
+      // If you're using Pages Router, uncomment these lines
+      // router.events?.off("routeChangeStart", handleRouteChange);
+      
+      // Only try to submit if allowed (not currently submitting)
+      if (isSubmissionAllowed()) {
+        submitFormData();
+      }
     };
   }, []);
+  
+  // Check if form has meaningful data
   const hasFormData = (data) => {
     if (!data) return false;
-    const fieldsToCheck = ["name", "email", "phone", "message"];
-    return fieldsToCheck.some(
-      (field) => data[field] && data[field].trim().length > 0
-    );
+    
+    // Check for required fields
+    const hasName = data.name && data.name.trim().length > 0;
+    const hasEmail = data.email && data.email.trim().length > 0;
+    const hasPhone = data.phone && data.phone.trim().length > 0;
+    const hasMessage = data.message && data.message.trim().length > 0;
+    
+    // At least one of these fields should have data
+    return hasName || hasEmail || hasPhone || hasMessage;
   };
+  
   // Submit form data at trigger points
   const submitFormData = async () => {
-    // Only submit if there are changes AND actual form data
+    // Only submit if:
+    // 1. No submission is currently in progress
+    // 2. There are changes
+    // 3. There's actual form data
     if (
+      isSubmissionAllowed() && 
       formChangesRef.current.hasChanges &&
       formChangesRef.current.data &&
       hasFormData(formChangesRef.current.data)
     ) {
       try {
-        await submitServiceRequest({
+        // Generate a unique submission ID
+        const submissionId = generateSubmissionId();
+        console.log("Auto-saving with ID:", submissionId);
+        
+        // Lock submissions
+        startSubmissionTimer(submissionId);
+        
+        // Make sure serviceId is included
+        const dataToSubmit = {
           ...formChangesRef.current.data,
+          serviceId: formChangesRef.current.data.serviceId || selectedService?._id,
+          // Include the submission ID
+          submissionId: submissionId,
           statusHistory: [
             ...formChangesRef.current.data.statusHistory,
             {
               status: "draft",
-              note: "Form data submitted",
-              updatedAt: "2025-05-26 03:53:56",
+              note: "Auto-saved form data",
+              updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
               updatedBy: "Patil5913",
             },
           ],
-        });
+        };
+
+        await submitServiceRequest(dataToSubmit);
+        
         // Reset changes after successful submission
         formChangesRef.current = {
           data: null,
@@ -113,6 +197,9 @@ function ServicesPage() {
         };
       } catch (error) {
         console.warn("Error submitting form data:", error);
+      } finally {
+        // Don't reset submission state here - let the timeout handle it
+        // This prevents multiple submissions right after an error
       }
     }
   };
@@ -127,26 +214,25 @@ function ServicesPage() {
         {
           status: "draft",
           note: "Service selected",
-          updatedAt: "2025-05-26 03:53:56",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
           updatedBy: "Patil5913",
         },
       ],
     };
     setFormData(newFormData);
-    // Only store if there's actual data
-    if (hasFormData(newFormData)) {
-      formChangesRef.current = {
-        data: newFormData,
-        hasChanges: true,
-        lastUpdated: Date.now(),
-      };
-    }
+    
+    formChangesRef.current = {
+      data: newFormData,
+      hasChanges: true,
+      lastUpdated: Date.now(),
+    };
+    
     document.body.style.overflow = "hidden";
   };
 
   const closeServiceDetail = async () => {
-    // Only submit if there's actual data
-    if (hasFormData(formChangesRef.current.data)) {
+    // Only submit if there's actual data and submission is allowed
+    if (hasFormData(formChangesRef.current.data) && isSubmissionAllowed()) {
       await submitFormData();
     }
 
@@ -167,75 +253,95 @@ function ServicesPage() {
         {
           status: "draft",
           note: `Updated ${name} field`,
-          updatedAt: "2025-05-26 03:53:56",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
           updatedBy: "Patil5913",
         },
       ],
     };
     setFormData(newFormData);
 
-    // Only store if there's actual data
-    if (hasFormData(newFormData)) {
-      formChangesRef.current = {
-        data: newFormData,
-        hasChanges: true,
-        lastUpdated: Date.now(),
-      };
-      setFormTouched(true);
-    } else {
-      formChangesRef.current = {
-        data: null,
-        hasChanges: false,
-        lastUpdated: null,
-      };
-      setFormTouched(false);
-    }
+    formChangesRef.current = {
+      data: newFormData,
+      hasChanges: true,
+      lastUpdated: Date.now(),
+    };
+    setFormTouched(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Only submit if there's actual data
+    // Prevent submission if:
+    // 1. Form is already being submitted
+    // 2. Any submission is in progress
+    if (formStatus.isSubmitting || !isSubmissionAllowed()) {
+      console.log("Preventing duplicate submission - already in progress");
+      return;
+    }
+
+    // Set submitting state
+    setFormStatus((prev) => ({
+      ...prev,
+      isSubmitting: true,
+    }));
+
+    // Check for required data
     if (!hasFormData(formData)) {
       setFormStatus({
         submitted: false,
+        isSubmitting: false,
         error: "Please fill in at least one field before submitting.",
       });
       return;
     }
 
     try {
-      await submitServiceRequest({
+      // Generate a unique submission ID
+      const submissionId = generateSubmissionId();
+      console.log("Manual submission with ID:", submissionId);
+      
+      // Lock submissions
+      startSubmissionTimer(submissionId);
+      
+      // Make sure serviceId is included
+      const submissionData = {
         ...formData,
+        serviceId: formData.serviceId || (selectedService?._id ? selectedService._id : undefined),
+        // Include the submission ID
+        submissionId: submissionId,
         statusHistory: [
           ...formData.statusHistory,
           {
             status: "draft",
-            note: "Form submitted",
-            updatedAt: "2025-05-26 03:53:56",
+            note: "Form submitted manually",
+            updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
             updatedBy: "Patil5913",
           },
         ],
-      });
+      };
+      
+      await submitServiceRequest(submissionData);
 
-      setFormStatus({
-        submitted: true,
-        error: null,
-      });
-
+      // Clear form changes reference to prevent auto-save
       formChangesRef.current = {
         data: null,
         hasChanges: false,
         lastUpdated: null,
       };
+
+      setFormStatus({
+        submitted: true,
+        isSubmitting: false,
+        error: null,
+      });
+      
       resetForm();
       setFormTouched(false);
     } catch (error) {
       setFormStatus({
         submitted: false,
-        error:
-          error.message ||
-          "There was an error submitting your request. Please try again.",
+        isSubmitting: false,
+        error: error.message || "There was an error submitting your request. Please try again.",
       });
     }
   };
@@ -251,7 +357,7 @@ function ServicesPage() {
         {
           status: "draft",
           note: "Form reset",
-          updatedAt: "2025-05-26 03:49:21",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
           updatedBy: "Patil5913",
         },
       ],
@@ -273,7 +379,7 @@ function ServicesPage() {
         {
           status: "draft",
           note: "Contact form opened",
-          updatedAt: "2025-05-26 03:49:21",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
           updatedBy: "Patil5913",
         },
       ],
@@ -368,8 +474,8 @@ function ServicesPage() {
           >
             At Bytewave, we offer a comprehensive suite of services designed to
             empower your business with cutting-edge solutions. From staffing and
-            recruitment to digital marketing, IT services solutions
-            we provide end-to-end support to help you achieve your goals.
+            recruitment to digital marketing, IT services solutions we provide
+            end-to-end support to help you achieve your goals.
           </motion.p>
         </div>
       </motion.div>
