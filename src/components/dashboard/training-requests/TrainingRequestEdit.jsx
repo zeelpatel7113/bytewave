@@ -42,7 +42,7 @@ export default function TrainingRequestEdit({ request, isOpen, onClose, onSucces
           status,
           notes,
           updatedAt: getCurrentDateTime(),
-          updatedBy: getCurrentUser(), // Current user's login
+          updatedBy: getCurrentUser(),
         }),
       });
 
@@ -70,15 +70,17 @@ export default function TrainingRequestEdit({ request, isOpen, onClose, onSucces
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Update Request Status</DialogTitle>
+      <DialogContent className="max-w-[500px] p-0">
+        <DialogHeader className="px-6 py-4 border-b">
+          <DialogTitle className="text-xl font-semibold">
+            Update Request Status
+          </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label>Status</Label>
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <div className="space-y-3">
+            <Label className="text-base font-medium">Status</Label>
             <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger>
+              <SelectTrigger className="h-11">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
@@ -93,21 +95,31 @@ export default function TrainingRequestEdit({ request, isOpen, onClose, onSucces
             </Select>
           </div>
 
-          <div>
-            <Label>Notes</Label>
+          <div className="space-y-3">
+            <Label className="text-base font-medium">Notes</Label>
             <Textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Add notes about this status change"
               required
+              className="min-h-[120px] resize-none"
             />
           </div>
 
-          <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="px-6"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className="px-6"
+            >
               {loading ? "Updating..." : "Update Status"}
             </Button>
           </div>

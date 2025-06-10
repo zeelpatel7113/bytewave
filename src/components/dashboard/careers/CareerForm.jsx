@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -8,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/toast";
+import { useEffect } from "react";
+import { Combobox } from "@/components/ui/combobox";
 import { getCurrentDateTime, getCurrentUser } from "@/lib/utils";
 import {
   Select,
@@ -49,9 +50,32 @@ const jobLocations = [
 ];
 
 export default function CareerForm({ onCareerCreated }) {
+  const [careerTypes, setCareerTypes] = useState([]);
+  const [isLoadingTypes, setIsLoadingTypes] = useState(true);
   const { toast } = useToast();
   const [formData, setFormData] = useState(initialFormState);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchCareerTypes = async () => {
+      try {
+        setIsLoadingTypes(true);
+        const response = await fetch("/api/career-types");
+        const data = await response.json();
+        if (data.success) {
+          // Keep as simple string array
+          const uniqueTypes = Array.from(new Set(data.data)).filter(Boolean);
+          setCareerTypes(uniqueTypes);
+        }
+      } catch (error) {
+        console.error("Failed to fetch career types:", error);
+      } finally {
+        setIsLoadingTypes(false);
+      }
+    };
+
+    fetchCareerTypes();
+  }, []);
 
   const handleSkillChange = (index, value) => {
     const newSkills = [...formData.coreSkills];
@@ -60,12 +84,10 @@ export default function CareerForm({ onCareerCreated }) {
   };
 
   const addSkill = () => {
-    if (formData.coreSkills.length < 5) {
-      setFormData({
-        ...formData,
-        coreSkills: [...formData.coreSkills, { skill: "" }],
-      });
-    }
+    setFormData({
+      ...formData,
+      coreSkills: [...formData.coreSkills, { skill: "" }],
+    });
   };
 
   const removeSkill = (index) => {
@@ -156,14 +178,17 @@ export default function CareerForm({ onCareerCreated }) {
               <Label htmlFor="careerType" className="text-base font-medium">
                 Career Type
               </Label>
-              <Input
-                id="careerType"
+              <Combobox
+                options={careerTypes}
                 value={formData.careerType}
-                onChange={(e) =>
-                  setFormData({ ...formData, careerType: e.target.value })
-                }
-                required
-                className="h-12"
+                onValueChange={(value) => {
+                  setFormData({ ...formData, careerType: value });
+                }}
+                onAddNew={(newValue) => {
+                  setCareerTypes([...careerTypes, newValue]);
+                  setFormData({ ...formData, careerType: newValue });
+                }}
+                placeholder="Select or enter career type"
               />
             </div>
             <div className="space-y-2">
@@ -201,7 +226,10 @@ export default function CareerForm({ onCareerCreated }) {
           {/* Experience Level and Project Type */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="experienceLevel" className="text-base font-medium">
+              <Label
+                htmlFor="experienceLevel"
+                className="text-base font-medium"
+              >
                 Experience Level
               </Label>
               <Select
@@ -272,16 +300,14 @@ export default function CareerForm({ onCareerCreated }) {
                 )}
               </div>
             ))}
-            {formData.coreSkills.length < 5 && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={addSkill}
-                className="mt-2"
-              >
-                Add Skill
-              </Button>
-            )}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={addSkill}
+              className="mt-2"
+            >
+              Add Skill
+            </Button>
           </div>
 
           {/* Job Location */}

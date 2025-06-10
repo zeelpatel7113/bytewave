@@ -80,7 +80,7 @@ const CareerGrid = ({ onApply, onJobsUpdate }) => {
     );
   }
 
-  return (
+return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-12">
@@ -101,7 +101,7 @@ const CareerGrid = ({ onApply, onJobsUpdate }) => {
 
       {/* Job Listings */}
       {filteredJobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-min">
           {filteredJobs.map((job, index) => (
             <CareerCard
               key={job._id || `job-${index}`}
