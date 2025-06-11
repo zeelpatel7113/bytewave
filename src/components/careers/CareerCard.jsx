@@ -32,7 +32,7 @@ const CareerCard = ({ job, index, onApply }) => {
     status: "viewed",
     notes: "Career card expanded",
     updatedAt: "2025-06-10 12:23:37",
-    updatedBy: "Patil5913"
+    updatedBy: "Bytewave Admin"
   };
 
   return (

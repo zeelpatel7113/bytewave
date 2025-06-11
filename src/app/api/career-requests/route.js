@@ -87,7 +87,7 @@ export async function POST(request) {
         status: 'pending',
         note: 'New application submitted',
         updatedAt: new Date(),
-        updatedBy: 'Patil5913'
+        updatedBy: 'Bytewave Admin'
       }];
     }
 

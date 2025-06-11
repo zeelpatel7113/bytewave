@@ -23,6 +23,11 @@ function TrainingPage() {
   const [error, setError] = useState(null);
   const [formTouched, setFormTouched] = useState(false);
 
+  // Add submission tracking system
+  const [submissionInProgress, setSubmissionInProgress] = useState(false);
+  const submissionTimeoutRef = useRef(null);
+  const submissionIdRef = useRef(null);
+
   // Form data in state for UI rendering
   const [formData, setFormData] = useState({
     name: "",
@@ -35,14 +40,15 @@ function TrainingPage() {
       {
         status: "draft",
         notes: "Initial form data",
-        updatedAt: "2025-05-26 05:28:16",
-        updatedBy: "Patil5913",
+        updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        updatedBy: "Bytewave Admin",
       },
     ],
   });
 
   const [formStatus, setFormStatus] = useState({
     submitted: false,
+    isSubmitting: false,
     error: null,
   });
 
@@ -52,6 +58,37 @@ function TrainingPage() {
     hasChanges: false,
     lastUpdated: null,
   });
+
+  // Generate a unique submission ID
+  const generateSubmissionId = () => {
+    return `training-submit-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  };
+
+  // Check if submission is currently in progress or recently completed
+  const isSubmissionAllowed = () => {
+    if (submissionInProgress) {
+      console.log("Training submission already in progress, preventing duplicate");
+      return false;
+    }
+    return true;
+  };
+
+  // Start submission timer
+  const startSubmissionTimer = (id) => {
+    submissionIdRef.current = id;
+    setSubmissionInProgress(true);
+    
+    // Clear any existing timeout
+    if (submissionTimeoutRef.current) {
+      clearTimeout(submissionTimeoutRef.current);
+    }
+    
+    // Set new timeout to reset submission state after 10 seconds
+    submissionTimeoutRef.current = setTimeout(() => {
+      setSubmissionInProgress(false);
+      submissionIdRef.current = null;
+    }, 10000); // 10 seconds lockout
+  };
 
   // Fetch trainings on component mount
   useEffect(() => {
@@ -80,11 +117,21 @@ function TrainingPage() {
     };
 
     loadTrainings();
+    
+    // Cleanup submission timeout on unmount
+    return () => {
+      if (submissionTimeoutRef.current) {
+        clearTimeout(submissionTimeoutRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
     const handleRouteChange = () => {
-      submitFormData();
+      // Only submit if allowed (not currently submitting)
+      if (isSubmissionAllowed()) {
+        submitFormData();
+      }
     };
 
     window.addEventListener("beforeunload", handleRouteChange);
@@ -93,46 +140,76 @@ function TrainingPage() {
     return () => {
       window.removeEventListener("beforeunload", handleRouteChange);
       router.events?.off("routeChangeStart", handleRouteChange);
-      submitFormData();
+      
+      // Only submit if allowed (not currently submitting)
+      if (isSubmissionAllowed()) {
+        submitFormData();
+      }
     };
   }, []);
 
   const hasFormData = (data) => {
     if (!data) return false;
-    return Object.keys(data).some(
-      (key) =>
-        !["statusHistory", "courseId"].includes(key) &&
-        data[key] &&
-        data[key].toString().trim().length > 0
-    );
+    
+    // Check for required fields
+    const hasName = data.name && data.name.trim().length > 0;
+    const hasEmail = data.email && data.email.trim().length > 0;
+    const hasPhone = data.phone && data.phone.trim().length > 0;
+    const hasMessage = data.message && data.message.trim().length > 0;
+    
+    // At least one of these fields should have data
+    return hasName || hasEmail || hasPhone || hasMessage;
   };
 
   const submitFormData = async () => {
+    // Only submit if:
+    // 1. No submission is currently in progress
+    // 2. There are changes
+    // 3. There's actual form data
     if (
+      isSubmissionAllowed() &&
       formChangesRef.current.hasChanges &&
       formChangesRef.current.data &&
       hasFormData(formChangesRef.current.data)
     ) {
       try {
-        await submitTrainingRequest({
+        // Generate a unique submission ID
+        const submissionId = generateSubmissionId();
+        console.log("Auto-saving training request with ID:", submissionId);
+        
+        // Lock submissions
+        startSubmissionTimer(submissionId);
+        
+        // Make sure courseId is included
+        const dataToSubmit = {
           ...formChangesRef.current.data,
+          courseId: formChangesRef.current.data.courseId || selectedTraining?._id,
+          // Include the submission ID
+          submissionId: submissionId,
           statusHistory: [
             ...formChangesRef.current.data.statusHistory,
             {
               status: "draft",
               notes: "Form data auto-saved",
-              updatedAt: "2025-05-26 05:28:16",
-              updatedBy: "Patil5913",
+              updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+              updatedBy: "Bytewave Admin",
             },
           ],
-        });
+        };
+
+        await submitTrainingRequest(dataToSubmit);
+        
+        // Reset changes after successful submission
         formChangesRef.current = {
           data: null,
           hasChanges: false,
           lastUpdated: null,
         };
       } catch (error) {
-        console.warn("Error submitting form data:", error);
+        console.warn("Error submitting training form data:", error);
+      } finally {
+        // Don't reset submission state here - let the timeout handle it
+        // This prevents multiple submissions right after an error
       }
     }
   };
@@ -147,8 +224,8 @@ function TrainingPage() {
         {
           status: "draft",
           notes: "Training course selected",
-          updatedAt: "2025-05-26 05:28:16",
-          updatedBy: "Patil5913",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          updatedBy: "Bytewave Admin",
         },
       ],
     };
@@ -165,7 +242,8 @@ function TrainingPage() {
   };
 
   const closeTrainingDetail = async () => {
-    if (hasFormData(formChangesRef.current.data)) {
+    // Only submit if there's actual data and submission is allowed
+    if (hasFormData(formChangesRef.current.data) && isSubmissionAllowed()) {
       await submitFormData();
     }
     setSelectedTraining(null);
@@ -181,8 +259,8 @@ function TrainingPage() {
         {
           status: "draft",
           notes: "Contact form opened",
-          updatedAt: "2025-05-26 05:28:16",
-          updatedBy: "Patil5913",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          updatedBy: "Bytewave Admin",
         },
       ],
     };
@@ -209,8 +287,8 @@ function TrainingPage() {
         {
           status: "draft",
           notes: `Updated ${name} field`,
-          updatedAt: "2025-05-26 05:28:16",
-          updatedBy: "Patil5913",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          updatedBy: "Bytewave Admin",
         },
       ],
     };
@@ -236,26 +314,54 @@ function TrainingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Prevent submission if:
+    // 1. Form is already being submitted
+    // 2. Any submission is in progress
+    if (formStatus.isSubmitting || !isSubmissionAllowed()) {
+      console.log("Preventing duplicate training submission - already in progress");
+      return;
+    }
+
+    // Set submitting state
+    setFormStatus((prev) => ({
+      ...prev,
+      isSubmitting: true,
+    }));
+
     try {
-      const response = await submitTrainingRequest({
+      // Generate a unique submission ID
+      const submissionId = generateSubmissionId();
+      console.log("Manual training submission with ID:", submissionId);
+      
+      // Lock submissions
+      startSubmissionTimer(submissionId);
+      
+      const submissionData = {
         ...formData,
+        courseId: formData.courseId || (selectedTraining?._id ? selectedTraining._id : undefined),
+        // Include the submission ID
+        submissionId: submissionId,
         statusHistory: [
           ...formData.statusHistory,
           {
             status: "draft",
-            notes: "Form submitted",
-            updatedAt: "2025-05-26 05:28:16",
-            updatedBy: "Patil5913",
+            notes: "Form submitted manually",
+            updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+            updatedBy: "Bytewave Admin",
           },
         ],
-      });
+      };
+      
+      const response = await submitTrainingRequest(submissionData);
 
       if (response.success) {
         setFormStatus({
           submitted: true,
+          isSubmitting: false,
           error: null,
         });
 
+        // Clear form changes reference to prevent auto-save
         formChangesRef.current = {
           data: null,
           hasChanges: false,
@@ -269,6 +375,7 @@ function TrainingPage() {
     } catch (error) {
       setFormStatus({
         submitted: false,
+        isSubmitting: false,
         error:
           error.message ||
           "There was an error submitting your request. Please try again.",
@@ -288,8 +395,8 @@ function TrainingPage() {
         {
           status: "draft",
           notes: "Form reset",
-          updatedAt: "2025-05-26 05:28:16",
-          updatedBy: "Patil5913",
+          updatedAt: new Date().toISOString().replace('T', ' ').substring(0, 19),
+          updatedBy: "Bytewave Admin",
         },
       ],
     };

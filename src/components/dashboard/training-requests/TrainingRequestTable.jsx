@@ -156,7 +156,29 @@ export default function TrainingRequestTable({ setEditRequest }) {
                       {request.experience}
                     </TableCell>
                     <TableCell className="px-6">
-                      {request.courseId?.title || "Unknown Course"}
+                      {(() => {
+                        if (!request.courseId) {
+                          return "No Course Selected";
+                        }
+
+                        // If courseId is properly populated with a title property
+                        if (
+                          typeof request.courseId === "object" &&
+                          request.courseId?.title
+                        ) {
+                          return request.courseId.title;
+                        }
+
+                        // If courseId is just a string ID
+                        if (
+                          typeof request.courseId === "string" ||
+                          request.courseId?._id
+                        ) {
+                          return "Loading Course..."; // You could fetch the course details here
+                        }
+
+                        return "Unknown Course";
+                      })()}
                     </TableCell>
                     <TableCell className="px-6">
                       <Badge
@@ -294,7 +316,7 @@ export default function TrainingRequestTable({ setEditRequest }) {
                             </p>
                           )}
                           <p className="text-xs text-muted-foreground">
-                            Updated by: {status.updatedBy || "Patil5913"}
+                            Updated by: {status.updatedBy || "Bytewave Admin"}
                           </p>
                         </div>
                       ))}

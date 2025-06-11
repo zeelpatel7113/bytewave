@@ -37,13 +37,13 @@ export function TrainingProvider({ children }) {
           ...courseData,
           createdAt: "2025-04-04 07:33:03",
           lastModified: "2025-04-04 07:33:03",
-          createdBy: "Patil5913",
+          createdBy: "Bytewave Admin",
           statusHistory: [
             {
               status: 'active',
               note: 'Course created',
               updatedAt: "2025-04-04 07:33:03",
-              updatedBy: "Patil5913"
+              updatedBy: "Bytewave Admin"
             }
           ]
         }),
@@ -75,7 +75,7 @@ export function TrainingProvider({ children }) {
               status: courseData.status || 'active',
               note: 'Course updated',
               updatedAt: "2025-04-04 07:33:03",
-              updatedBy: "Patil5913"
+              updatedBy: "Bytewave Admin"
             }
           ]
         }),
@@ -101,7 +101,7 @@ export function TrainingProvider({ children }) {
         },
         body: JSON.stringify({
           deletedAt: "2025-04-04 07:33:03",
-          deletedBy: "Patil5913",
+          deletedBy: "Bytewave Admin",
         }),
       });
       const data = await response.json();

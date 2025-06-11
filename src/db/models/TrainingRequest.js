@@ -28,6 +28,12 @@ const trainingRequestSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  // Add submission ID field for deduplication
+  submissionId: {
+    type: String,
+    index: true,
+    sparse: true
+  },
   name: {
     type: String,
     trim: true,
