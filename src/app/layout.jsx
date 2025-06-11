@@ -4,7 +4,7 @@ import { ToastProvider } from '@/components/ui/toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'Technology',
+  title: 'Bytewave Technology',
   description: 'Building digital excellence through innovation and creativity',
 };
 
