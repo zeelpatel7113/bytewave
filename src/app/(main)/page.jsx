@@ -1,20 +1,21 @@
-'use client';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import ServicesList from '@/components/ServicesList';
-import { homeContent } from '@/content/home';
-import Hero from '@/components/hero';
-import ProcessSection from '@/components/ProcessSection';
-import { Stats } from '@/components/Stats';
-import About from '../../components/about';
-import Testimonials from '@/components/Testimonials';
+"use client";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import ServicesList from "@/components/ServicesList";
+import { homeContent } from "@/content/home";
+import Hero from "@/components/hero";
+import ProcessSection from "@/components/ProcessSection";
+import { Stats } from "@/components/Stats";
+import About from "../../components/about";
+import Testimonials from "@/components/Testimonials";
+// import WhatsAppChatButton from "@/components/WaButton";
 
 export default function Home() {
   return (
     <div className="bg-white">
       <Hero />
-      <Stats/>
+      <Stats />
       {/* <section className="py-20 bg-gray-50">
         <motion.div 
           className="container mx-auto px-4"
@@ -53,8 +54,12 @@ export default function Home() {
 
       <ServicesList services={homeContent.services} />
       <ProcessSection />
-      <About/>
-      <Testimonials/>
+      <About />
+      <Testimonials />
+
+
+{/* contact section of dashboard*/}
+
 
       <section className="container mx-auto px-6 py-20">
         <motion.div
@@ -79,6 +84,14 @@ export default function Home() {
           </Link>
         </motion.div>
       </section>
+      {/* <div className="fixed right-8">
+        <WhatsAppChatButton
+          phone="918200662782"
+          message="Hi! I have a question about your product."
+          size={64}
+          showPopup={true}
+        />
+      </div> */}
     </div>
   );
 }

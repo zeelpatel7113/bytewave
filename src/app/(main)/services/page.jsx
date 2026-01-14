@@ -472,10 +472,10 @@ function ServicesPage() {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            At Bytewave, we offer a comprehensive suite of services designed to
-            empower your business with cutting-edge solutions. From staffing and
-            recruitment to digital marketing, IT services solutions we provide
-            end-to-end support to help you achieve your goals.
+            At Bytewave, we provide a comprehensive suite of staffing and career solutions
+designed to empower both businesses and professionals. From recruitment and
+workforce planning to training and placement, we deliver end-to-end support to
+help you achieve your hiring and career goals.
           </motion.p>
         </div>
       </motion.div>

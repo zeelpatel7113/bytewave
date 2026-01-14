@@ -18,6 +18,7 @@ import TrainingRequest from "./training-requests/TrainingRequest";
 import Career from "./careers/Career";
 import CareerRequest from "./career-requests/CareerRequest";
 import Contact from "./contacts/Contact";
+import Blogs from "./blogs/Blogs";
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("services");
@@ -64,6 +65,12 @@ export default function Dashboard() {
       label: "Contact Forms",
       icon: MessageCircle,
       component: <Contact />,
+    },
+    {
+      id: "blogs",
+      label: "Blog Section",
+      icon: MessageCircle,
+      component: <Blogs />,
     },
   ];
 

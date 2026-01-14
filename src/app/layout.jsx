@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'Bytewave Technology',
-  description: 'Building digital excellence through innovation and creativity',
+  description: 'Building workforce excellence through innovation and expertise',
 };
 
 export default function RootLayout({ children }) {

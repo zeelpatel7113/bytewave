@@ -10,22 +10,22 @@ function WhatSetsUsApart() {
     {
       icon: <Rocket className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Innovation First",
-      content: "Merging tomorrow's tech with today's talent."
+      content: "Adapting modern tools and methods for smarter hiring."
     },
     {
       icon: <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Result Driven",
-      content: "Delivering hires that drive business growth."
+      content: "Placing candidates who accelerate business success."
     },
     {
       icon: <Shield className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Quality Assured",
-      content: "Expert-vetted talent and tech solutions."
+      content: "Every profile is screened, vetted, and aligned with client needs"
     },
     {
       icon: <Zap className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Rapid Delivery",
-      content: "Agile staffing meets urgent tech needs."
+      content: "Agile recruitment designed to meet urgent hiring goals."
     }
   ];
   

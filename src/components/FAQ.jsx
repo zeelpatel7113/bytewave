@@ -5,30 +5,28 @@ import { useInView } from "@/hooks/useInView";
 function FAQ() {
   const [headerRef, headerVisible] = useInView({ threshold: 0.1 });
   const [contentRef, contentVisible] = useInView({ threshold: 0.1 });
-
   const [activeIndex, setActiveIndex] = useState(null);
 
   const faqs = [
     {
       question: "What services do you offer?",
       answer:
-        "Talent-as-a-Service: From niche IT specialists to executive hires, augmented with workforce analytics and digital transformation tools.",
+        "We specialise in staffing, recruitment, career training, and placement support.",
     },
     {
       question: "Which industries do you serve most?",
       answer:
-        "Fintech, healthcare IT, SaaS, and enterprise cybersecurity—we speak your industry’s language and understand its talent challenges.",
+        "We work across IT, finance, healthcare, consulting, and professional services.",
     },
     {
-      question: "How do you vet IT candidates' technical skills?",
+      question: "How do you vet candidates’ skills?",
       answer:
-        "All technical candidates undergo hands-on coding tests, system design interviews, and scenario-based assessments tailored to your stack. We validate both hard skills and problem-solving abilities.",
+        "Through structured assessments, interviews, and expert evaluation.",
     },
     {
-      question:
-        "How do you help candidates stand out in competitive job markets?",
+      question: "How do you help candidates stand out?",
       answer:
-        "We transform candidates into top-tier prospects through comprehensive career branding. Our process begins with professionally rewriting resumes to beat ATS algorithms, then enhancing LinkedIn profiles to attract recruiter attention. Candidates receive mock interviews conducted by real hiring managers, complete with personalized feedback. Finally, we leverage our employer network to match them with ideal opportunities. This end-to-end approach typically triples interview callbacks compared to independent job searching.",
+        "By offering resume enhancement, interview preparation, and personalised recruiter support.",
     },
   ];
 
@@ -50,7 +48,6 @@ function FAQ() {
           Frequently Asked Questions
         </h2>
       </div>
-
       <div
         ref={contentRef}
         className={`max-w-3xl mx-auto transition-all duration-700 delay-200 transform ${

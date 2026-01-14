@@ -19,25 +19,25 @@ export const homeContent = {
     {
       number: '01',
       title: 'Staffing & Recruitment',
-      description: 'Right talent. Right time. Real results.',
+      description: 'Right candidate. Right time. Real growth.',
       image: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=200&h=200'
     },
     {
       number: '02',
       title: 'Training & Upskilling',
-      description: 'Fueling growth through knowledge and capability.',
+      description: 'Equipping talent with industry-ready skills.',
       image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=200&h=200'
     },
     {
       number: '03',
-      title: 'IT Solutions & Digital Transformation',
-      description: 'Empowering businesses through intelligent technology.',
-      image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=200&h=200'
+      title: 'Career Guidance & Placement',
+      description: 'Personalized support for job seekers.',
+      image: 'https://d2py10ayqu2jji.cloudfront.net/Career.webp'
     },
     {
       number: '04',
-      title: 'Marketing & Brand Strategy',
-      description: 'Where creativity meets measurable growth.',
+      title: 'Workforce Strategy & HR Solutions',
+      description: 'Streamlined hiring for lasting impact.',
       image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=200&h=200'
     }
   ],
@@ -62,8 +62,8 @@ export const homeContent = {
     ]
   },
   cta: {
-    title: "Ready to Transform Your Business?",
-    description: "Let's work together to bring your vision to life. Contact us today to start your digital journey.",
+    title: "Ready to Transform Your Hiring?",
+    description: "Let’s work together to bring the right talent to your business. Contact us today to start your staffing journey.",
     button: {
       text: "Contact Us",
       link: "/contact"

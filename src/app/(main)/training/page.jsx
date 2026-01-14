@@ -486,8 +486,7 @@ function TrainingPage() {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Empowering professionals with comprehensive training programs
-            designed to enhance skills and drive career growth.
+            Empowering job seekers with tailored training programs designed to build skills,boost confidence, and drive successful placements.
           </motion.p>
         </div>
       </motion.div>
@@ -529,8 +528,8 @@ function TrainingPage() {
               Training Inquiry Form
             </h2>
             <p className="text-gray-600">
-              Fill out the form below and we'll get back to you with more
-              information about our training programs.
+              Fill out the form below and we'll get back to you with more information about our
+placement-focused training programs.
             </p>
           </div>
 

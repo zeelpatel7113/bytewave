@@ -10,7 +10,7 @@ export default function Contact() {
     phone: '',
     message: ''
   });
-  
+
   const [status, setStatus] = useState({
     loading: false,
     error: null,
@@ -84,10 +84,11 @@ export default function Contact() {
         >
           <span className="text-blue-600 font-medium mb-4 block">GET IN TOUCH</span>
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Let's Build Something Amazing Together
+            Let’s Build Careers and Teams Together
           </h1>
           <p className="text-zinc-600 mb-16 max-w-2xl mx-auto">
-            Have questions or ready to start your next project? We're here to help turn your vision into reality.
+            Whether you’re a professional looking for your next opportunity or a business
+            seeking top talent, we’re here to connect you with the right solution.
           </p>
         </motion.div>
       </div>
@@ -115,12 +116,12 @@ export default function Contact() {
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                 </span>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter your name" 
+                  placeholder="Enter your name"
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -135,12 +136,12 @@ export default function Contact() {
                     <polyline points="22,6 12,13 2,6"></polyline>
                   </svg>
                 </span>
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Enter your email" 
+                  placeholder="Enter your email"
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -154,12 +155,12 @@ export default function Contact() {
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                   </svg>
                 </span>
-                <input 
-                  type="tel" 
+                <input
+                  type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter your phone number" 
+                  placeholder="Enter your phone number"
                   className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-10 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
                 />
               </div>
@@ -167,17 +168,17 @@ export default function Contact() {
 
             <div>
               <label className="block text-sm mb-2">Message</label>
-              <textarea 
+              <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Tell us about your project or inquiry" 
-                rows="4" 
+                placeholder="Tell us about your project or inquiry"
+                rows="4"
                 className="w-full bg-zinc-200 border border-gray-800 rounded py-2 px-4 text-zinc-900 placeholder-zinc-600 focus:outline-none focus:border-blue-500"
               ></textarea>
             </div>
 
-            <button 
+            <button
               type="submit"
               disabled={status.loading}
               className={`w-full ${status.loading ? 'bg-blue-400' : 'bg-blue-500 hover:bg-blue-600'} text-blue-50 font-medium py-3 rounded transition-colors flex items-center justify-center gap-2`}
@@ -209,7 +210,7 @@ export default function Contact() {
       {/* Contact Info Cards */}
       <div className="container mx-auto px-4 pb-24">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
@@ -224,8 +225,8 @@ export default function Contact() {
             <a href="mailto:contact@bytewavetechnology.com" className="text-blue-500 hover:underline">contact@bytewavetechnology.com</a>
             <p className="text-zinc-600 text-sm mt-2">We aim to respond within 24 hours</p>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -240,8 +241,8 @@ export default function Contact() {
             <p className="text-blue-500">Mon - Fri: 10AM - 6PM EST</p>
             <p className="text-zinc-600 text-sm mt-2">Weekend: Mail us</p>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.5 }}
@@ -253,7 +254,7 @@ export default function Contact() {
               </span>
             </div>
             <h3 className="text-lg font-medium mb-2">Visit us</h3>
-            <p className="text-blue-500">Harrisonville, Missouri</p>
+            <p className="text-blue-500">117, South Lexington Street</p>
             <p className="text-zinc-600 text-sm mt-2">United States</p>
           </motion.div>
         </div>

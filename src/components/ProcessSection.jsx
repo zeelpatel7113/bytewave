@@ -5,48 +5,48 @@ import { motion, LazyMotion, domAnimation, m } from 'framer-motion';
 const steps = [
   {
     number: '01',
-    title: 'Career Assessment & Strategy Session',
-    description: 'Kickstart your journey with expert guidance'
+    title: 'Career Consultation & Planning',
+    description: 'Kickstart your path with expert advice'
   },
   {
     number: '02',
-    title: 'Industry-Aligned Technical Training',
-    description: 'Master in-demand skills with top professionals'
+    title: 'Skill Training & Development',
+    description: 'Build market-ready capabilities'
   },
   {
     number: '03',
-    title: 'Expert Resume Crafting',
-    description: 'A resume that stands out'
+    title: 'Professional Resume Crafting',
+    description: 'Showcase your best profile'
   },
   {
     number: '04',
-    title: 'Resume Deep-Dive Workshop',
-    description: 'Perfect your pitch'
+    title: 'Resume Review & Workshop',
+    description: 'Sharpen your strengths'
   },
   {
     number: '05',
-    title: 'Personalized Recruiter Advocacy',
+    title: 'Dedicated Recruiter Support',
     description: 'Your advocate in the job market'
   },
   {
     number: '06',
-    title: 'Interview Mastery Program',
-    description: 'Confidence to conquer interviews'
+    title: 'Interview Coaching Program',
+    description: 'Confidence to secure offers'
   },
   {
     number: '07',
-    title: 'Seamless Onboarding Support',
-    description: 'Paperwork made painless'
+    title: 'Onboarding & HR Assistance',
+    description: 'Smooth transition into roles'
   },
   {
     number: '08',
-    title: 'Compliance & Background Verification',
-    description: 'Cross the finish line smoothly'
+    title: 'Compliance & Background Checks',
+    description: 'Final step to assured placements'
   }
 ];
 
 const ProcessSection = () => {
-  const descriptionText = "Our structured 8-step process removes the guesswork from job hunting. Whether you're upskilling, navigating career changes, or entering a new industry, we partner with you at every stage.";
+  const descriptionText = "Our structured 8-step hiring process removes the guesswork from placements.Whether you’re a candidate, recruiter, or employer, we partner with you at every stage.";
   
   // Removed container variants since we don't want card animations
 

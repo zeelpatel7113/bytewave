@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function TrainingIntro() {
   const descriptionText =
-    "Our expert-led training programs blend cutting-edge knowledge with hands-on practice, equipping you with the skills to excel in today’s competitive landscape. From foundational concepts to advanced strategies, we deliver actionable learning for real-world success.";
+    "Our expert-led programs combine industry knowledge with practical preparation,equipping you with the skills to excel in today’s hiring market. From resume building and interview mastery to technical upskilling, we deliver actionable training that ensures real-world career success.";
   const words = descriptionText.split(" ");
   const { scrollYProgress } = useScroll();
   const [wordOpacities, setWordOpacities] = useState(
@@ -75,7 +75,7 @@ export default function TrainingIntro() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              Master In-Demand Skills. Accelerate Your Career.
+              Master Job-Ready Skills. Secure Your Future.
             </motion.h2>
 
             <div className="text-xl leading-relaxed animated-text text-zinc-900">

@@ -55,67 +55,78 @@ const CompanyLogos = () => {
 
 const Testimonials = () => {
   const testimonials = [
-    {
-      name: "Sarah Johnson",
-      role: "Marketing Director",
-      company: "TechCorp Solutions",
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "CPITRADEMEDIA has transformed how we connect with our audience. Their industry magazines and digital platforms have given us unprecedented reach.",
-      rating: 5,
-    },
-    {
-      name: "Michael Chen",
-      role: "Events Manager",
-      company: "Global Innovations",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "The live events organized by CPITRADEMEDIA are second to none. The attention to detail and professional execution consistently exceed expectations.",
-      rating: 5,
-    },
-    {
-      name: "Emma Davis",
-      role: "CEO",
-      company: "Future Systems",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "Working with CPITRADEMEDIA has been instrumental in establishing our brand presence. Their multi-format approach ensures we reach our target audience effectively.",
-      rating: 5,
-    },
-    {
-      name: "David Wilson",
-      role: "Digital Strategist",
-      company: "Innovation Hub",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "The digital media services provided by CPITRADEMEDIA have helped us achieve remarkable growth in our online presence.",
-      rating: 5,
-    },
-    {
-      name: "Lisa Zhang",
-      role: "Brand Manager",
-      company: "Global Tech",
-      image:
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "Their industry magazines have become an essential platform for our brand messaging. The reach and impact are exceptional.",
-      rating: 5,
-    },
-    {
-      name: "James Anderson",
-      role: "Operations Director",
-      company: "Future Media",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
-      content:
-        "The webinars and virtual events hosted by CPITRADEMEDIA have helped us maintain strong connections with our audience even in challenging times.",
-      rating: 5,
-    },
-  ];
+  {
+    name: "Aditi Singh",
+    role: "Software Engineer",
+    company: "Amazon",
+    image:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Thrilled to announce that I’ve joined Amazon as a Software Engineer! The journey wasn’t easy, but Bytewave’s structured training and mock interviews gave me the edge I needed.",
+    rating: 5,
+  },
+  {
+    name: "Viswadatta Chinta",
+    role: "Data Analyst",
+    company: "A Tech Logistics",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Excited to start my new role as a Data Analyst at A Tech Logistics. From resume building to advanced SQL and Power BI training, Bytewave guided me every step of the way.",
+    rating: 5,
+  },
+  {
+    name: "Jyoti Vapre",
+    role: "Software Engineer",
+    company: "Ironclad",
+    image:
+      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Overjoyed to share that I’ve joined Ironclad as a Software Engineer! Bytewave’s intensive coding bootcamp and real-world project simulations gave me the confidence to crack the interviews.",
+    rating: 5,
+  },
+  {
+    name: "Deepankar Sakya",
+    role: "Supply Chain Analyst",
+    company: "Tech Electronics",
+    image:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Happy to begin my career as a Supply Chain Analyst at Tech Electronics. Bytewave’s analytics training and personalized mentorship really helped me bridge the gap between academics and industry.",
+    rating: 5,
+  },
+  {
+    name: "Abhilash Komuravelli",
+    role: "Power BI Developer",
+    company: "Deel",
+    image:
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Excited to step into my new role as a Power BI Developer at Deel. Bytewave not only sharpened my technical skills but also prepared me with soft skills and interview strategies.",
+    rating: 5,
+  },
+  {
+    name: "Hema Yadavalli",
+    role: "Business Analyst",
+    company: "Cigna Health",
+    image:
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Delighted to share that I’ve accepted an offer as a Business Analyst at Cigna Health. Bytewave’s training on requirement analysis and case studies made me confident to take on this role.",
+    rating: 5,
+  },
+  {
+    name: "Prathyusha Rajapudi",
+    role: "React Developer",
+    company: "OpenLaw",
+    image:
+      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=128&h=128&q=80",
+    content:
+      "Thrilled to begin my journey with OpenLaw as a React Developer. Bytewave’s hands-on React projects and placement assistance helped me achieve this milestone.",
+    rating: 5,
+  },
+];
+
 
   const marqueeTestimonials = [...testimonials, ...testimonials];
 

@@ -57,7 +57,8 @@ export default function ServicesList({ services }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Explore our comprehensive range of services designed to meet your needs and exceed your expectations.
+Explore our comprehensive range of solutions designed to meet hiring needs and
+exceed expectations.
             </motion.p>
           </motion.div>
 
@@ -68,7 +69,7 @@ export default function ServicesList({ services }) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              Tailored Expertise to Elevate Your Business
+              Tailored Expertise to Elevate Your Workforce
             </motion.h1>
 
             {services.map((service, index) => (

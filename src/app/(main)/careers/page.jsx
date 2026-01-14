@@ -39,8 +39,9 @@ const CareersPage = () => {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Advance your career where business, tech, and growth converge-transforming skills into solutions that connect the digital economy.
-          </motion.p>
+Advance your career with Bytewave, where opportunities, skills, and growth
+converge. We connect professionals with the right roles across industries, helping
+you turn potential into success.          </motion.p>
         </div>
       </motion.div>
 

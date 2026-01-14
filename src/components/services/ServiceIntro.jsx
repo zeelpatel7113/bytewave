@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function ServiceIntro() {
   const descriptionText =
-    "We drive results through integrated marketing and technology solutions—blending digital innovation with strategic recruitment, IT, and cloud services. Our end-to-end approach creates awareness, engages audiences, and converts opportunities into growth. From staffing to SaaS, We tailor solutions that deliver measurable impact.";
+    "We create results through integrated staffing and training solutions, blending talent cquisition with career development, workforce consulting, and placement support. Our end-to-end approach connects employers with the right professionals, builds stronger teams, and helps candidates secure the roles they deserve. From sourcing to onboarding, we tailor solutions that deliver measurable success";
   const words = descriptionText.split(" ");
   const { scrollYProgress } = useScroll();
   const [wordOpacities, setWordOpacities] = useState(
@@ -75,7 +75,8 @@ export default function ServiceIntro() {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              Empower Talent. Elevate Brands. Engineer Growth.
+              Empower People. Enable Growth. Elevate Success
+
             </motion.h2>
 
             <div className="text-xl leading-relaxed animated-text text-zinc-900">

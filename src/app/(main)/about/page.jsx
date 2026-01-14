@@ -45,7 +45,7 @@ function App() {
     }
   ];
 
-  const descriptionText = "We deliver through-the-line talent solutions-a unified approach that combines strategic recruitment with targeted IT staffing to maximize workforce potential. By leveraging our dual expertise in human capital and technology, we build employer brand awareness, foster meaningful candidate engagement, and drive measurable hiring outcomes for our partners.";
+  const descriptionText = "We deliver end-to-end staffing and recruitment solutions with a unified approach that blends strategic hiring, candidate training, and workforce consulting to maximise career and business potential. By leveraging our expertise in human capital and placement services, we help companies build stronger teams, connect professionals with the right opportunities, and drive measurable results";
   const words = descriptionText.split(' ');
   const { scrollYProgress } = useScroll();
   const [wordOpacities, setWordOpacities] = useState(Array(words.length).fill(0.2));
@@ -130,8 +130,7 @@ function App() {
             animate={{ opacity: 0.8 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Powering Businesses with Elite Talent, Future-Ready IT Solutions, and Growth-Optimized Strategies.
-          </motion.p>
+Powering Careers with Talent. Supporting Businesses with Workforce Solutions.          </motion.p>
         </div>
       </motion.div>
 
@@ -159,7 +158,8 @@ function App() {
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
               >
-                Empower Talent. Elevate Brands. Engineer Growth.
+                Empower People. Enable Growth. Elevate Success
+
               </motion.h2>
               
               <div className="text-xl leading-relaxed animated-text text-zinc-900">

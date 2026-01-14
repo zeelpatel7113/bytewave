@@ -10,22 +10,22 @@ function WhoWeAre() {
     {
       icon: <BookOpen className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Our Story",
-      content: "Architects connecting talent with technology."
+      content: "Connecting talent with opportunities that matter."
     },
     {
       icon: <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Mission & Vision",
-      content: "Fueling business success through people+tech."
+      content: "Fueling business success and career growth through people-first solutions."
     },
     {
       icon: <Code className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Our Expertise",
-      content: "Where skilled talent meets IT innovation."
+      content: "Where skilled professionals meet the right opportunities."
     },
     {
       icon: <Heart className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />,
       title: "Customer-Centric",
-      content: "Trusted partners in your growth journey."
+      content: "A trusted partner in every growth journey."
     }
   ];
   

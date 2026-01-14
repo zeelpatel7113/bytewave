@@ -104,9 +104,16 @@ export async function POST(request) {
       }]
     };
 
+    // Conditionally add date if provided
+    if (data.date) {
+      contactData.date = data.date;
+    }
+
     // Create the contact
     const contact = await Contact.create(contactData);
     const formattedContact = formatContactData(contact);
+
+    console.log("data:", formattedContact)
 
     return NextResponse.json(
       { 

@@ -14,6 +14,7 @@ export default function Navbar() {
     { name: 'Training', path: '/training' },
     { name: 'Careers', path: '/careers' },
     { name: 'About', path: '/about' },
+    { name: 'Blog', path: '/blog' },
     // { name: 'Contact', path: '/contact' },
   ];
 

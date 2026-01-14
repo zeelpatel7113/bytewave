@@ -7,13 +7,13 @@ import Link from 'next/link';
 const About = () => {
   const contentTypes = [
     {
-      title: "Precision IT Talent",
-      description: "Matched in Minutes, Not Months",
+      title: "Precision Recruitment",
+      description: "Top talent matched quickly and effectively",
       icon: Clock
     },
     {
       title: "Zero Guesswork",
-      description: "Your Shortcut to Elite Tech Hires",
+      description: "Smart screening for the right fit",
       icon: Target
     },
     {
@@ -22,13 +22,13 @@ const About = () => {
       icon: Shield
     },
     {
-      title: "Talent. On Tap.",
-      description: "Ctrl+Alt+Hire",
+      title: "Talent. On Demand.",
+      description: "Ctrl+Alt+Career",
       icon: Cpu
     }
   ];
 
-  const descriptionText = "At Bytewave Technology, we specialize in staffing & recruiting, IT services and marketing services, connecting top-tier tech talent with forward-thinking companies. Our mission is to empower businesses with scalable solutions and help professionals unlock their career potential—delivering results that matter.";
+  const descriptionText = "At Bytewave Technology, we specialise in staffing, recruitment, training, and placement services, connecting skilled professionals with top organisations. Our mission is to empower businesses with the right workforce and help individuals unlock their career potential, delivering results that matter";
   const words = descriptionText.split(' ');
   const { scrollYProgress } = useScroll();
   
@@ -85,7 +85,8 @@ const About = () => {
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
             >
-              Bridging Talent with Innovation
+              Bridging Talent with Opportunity
+
             </motion.h1>
 
             <div className="text-lg md:text-xl text-gray-700 animated-text break-words whitespace-pre-wrap">
@@ -120,8 +121,9 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
             >
-              Our Mission: Helping our stakeholders reach their preferred 
-              customers and targets, time and time again.
+              Our Mission:  Helping our clients hire faster, smarter, and better, while supporting
+candidates to achieve career success time and time again.
+
             </motion.p>
           </div>
 

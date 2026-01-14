@@ -33,17 +33,18 @@ const stats = [
   {
     value: 50,
     prefix: '>',
-    label: 'Projects Completed'
+    label: 'Hiring Campaigns Completed'
+
   },
   {
     value: 390,
     suffix: '+',
-    label: 'Clients Served'
+    label: 'Clients Partnered'
   },
   {
     value: 520,
     suffix: '+',
-    label: 'Students Trained'
+    label: 'Professionals Trained'
   }
 ];
 

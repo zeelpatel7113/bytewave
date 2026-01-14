@@ -87,7 +87,7 @@ function Hero() {
           <div className="w-full lg:w-[60%] space-y-6 sm:space-y-8 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-50 border-1 border-blue-500 rounded-full mb-4 sm:mb-6 opacity-0 animate-on-scroll slide-in-left transition-all duration-500">
               <Sparkles className="w-3.5 sm:w-4 h-3.5 sm:h-4 text-blue-500" />
-              <span className="text-xs sm:text-sm font-medium text-zinc-950">Empowering Talent. Elevating Business.</span>
+              <span className="text-xs sm:text-sm font-medium text-zinc-950">Elevating Careers. Elevating Business.</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-gray-900 leading-tight">
               <motion.span
@@ -96,7 +96,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="inline-block"
               >
-                Bridging
+                Connecting
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -104,7 +104,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="inline-block"
               >
-                the
+                people
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -112,7 +112,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="inline-block"
               >
-                gap
+                with
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -120,7 +120,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.5 }}
                 className="inline-block text-blue-600"
               >
-                between
+                opportunities
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -128,7 +128,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.6 }}
                 className="inline-block"
               >
-                people
+                that
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -136,7 +136,7 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.7 }}
                 className="inline-block"
               >
-                and
+                shape
               </motion.span>{" "}
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -144,12 +144,13 @@ function Hero() {
                 transition={{ duration: 0.5, delay: 0.8 }}
                 className="inline-block"
               >
-                possibilities.
+                futures.
               </motion.span>
             </h1>
             <p className="text-base sm:text-lg text-gray-600 max-w-xl sm:max-w-2xl mx-auto lg:mx-0 opacity-0 animate-on-scroll slide-in-left transition-all duration-500">
-              From cutting-edge IT solutions and transformative digital strategies to precision-driven staffing and impactful marketing - Bytewave doesn't just support industries, we empower them to evolve, scale, and lead.
-            </p>
+From precision-driven staffing, advanced career training, and seamless placements
+to tailored workforce strategies, Bytewave doesn’t just fill roles, we empower
+professionals and businesses to grow, adapt, and lead.            </p>
           </div>
 
           {/* Grid Content - Simplified animations for better performance */}

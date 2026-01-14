@@ -42,6 +42,10 @@ const contactSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
+  date: {
+    type: String,
+    trim: true
+  },
   statusHistory: [statusHistorySchema]
 }, {
   timestamps: true

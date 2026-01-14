@@ -13,7 +13,8 @@ export default function middleware(req) {
     '/api/auth/login',
     '/api/contacts',
     '/api/career-posting', 
-    '/api/career-requests'
+    '/api/career-requests',
+    '/api/blogs'
   ];
 
   // Check if the current path is a public API route
@@ -35,7 +36,7 @@ export default function middleware(req) {
   }
 
   // Protect API routes that require authentication
-  if (pathname.startsWith('/api')) {
+  if (pathname !== '/api/blogs' && pathname.startsWith('/api')) {
     if (!isAuthenticated) {
       return NextResponse.json(
         { 
